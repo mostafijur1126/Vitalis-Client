@@ -11,7 +11,6 @@ import { authClient } from "@/lib/auth-client";
 export default function Navbar() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
-  // console.log(user);
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -26,7 +25,11 @@ export default function Navbar() {
     setIsOpen(false);
   }, [pathname]);
 
-  const isActive = (path) => pathname.pathname === path;
+  if (pathname.includes("dashboard")) {
+    return null;
+  }
+
+  const isActive = (path) => pathname === path;
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -35,7 +38,7 @@ export default function Navbar() {
   ];
 
   if (user) {
-    navItems.push({ name: "Dashboard", path: "/dashboard" });
+    navItems.push({ name: "Dashboard", path: `/dashboard/${user?.role}` });
   }
   const onLogout = async () => {
     await authClient.signOut({

@@ -1,9 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FaXTwitter, FaInstagram, FaYoutube } from "react-icons/fa6";
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname.includes("dashboard")) {
+    return null;
+  }
   return (
     <footer className="bg-white dark:bg-[#1E1C18] border-t border-[#E8E0D8] dark:border-[#3A3530] transition-colors duration-300">
       <div className=" mx-auto px-6 sm:px-6 lg:px-8 py-12">
