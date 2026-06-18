@@ -27,7 +27,7 @@ const features = [
 export default function WhyChoose() {
   return (
     <section className="py-16 md:py-20 bg-white dark:bg-[#1E1C18] transition-colors duration-300">
-      <div className="px-4 sm:px-6 lg:px-8 xl:px-6xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-6xl">
         {" "}
         {/* Custom px-6xl class — or use px-8 */}
         <motion.div

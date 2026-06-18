@@ -29,7 +29,7 @@ export default function Banner() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/classes"
+                href="/all-classes"
                 className="inline-flex items-center px-6 py-3 bg-[#D4845A] text-white font-['Inter'] font-medium rounded-lg hover:bg-[#B86A42] transition-colors text-base sm:text-lg shadow-md hover:shadow-lg"
               >
                 Explore Classes

@@ -33,7 +33,7 @@ const testimonials = [
 export default function SuccessStories() {
   return (
     <section className="py-16 md:py-20 bg-white dark:bg-[#1E1C18] transition-colors duration-300">
-      <div className="px-4 sm:px-6 lg:px-8 xl:px-6xl">
+      <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-6xl">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

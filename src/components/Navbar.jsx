@@ -33,7 +33,7 @@ export default function Navbar() {
 
   const navItems = [
     { name: "Home", path: "/" },
-    { name: "All Classes", path: "/classes" },
+    { name: "All Classes", path: "/all-classes" },
     { name: "Community Forum", path: "/forum" },
   ];
 
