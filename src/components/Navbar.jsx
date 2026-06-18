@@ -1,13 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { FaBars, FaTimes, FaUserCircle, FaSun, FaMoon } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import Image from "next/image";
+import { authClient } from "@/lib/auth-client";
 
-export default function Navbar({ user, onLogout }) {
+export default function Navbar() {
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  // console.log(user);
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
@@ -32,6 +37,15 @@ export default function Navbar({ user, onLogout }) {
   if (user) {
     navItems.push({ name: "Dashboard", path: "/dashboard" });
   }
+  const onLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/auth/login");
+        },
+      },
+    });
+  };
 
   return (
     <nav className="bg-white dark:bg-[#1E1C18] border-b border-[#E8E0D8] dark:border-[#3A3530] shadow-sm sticky top-0 z-50 transition-colors duration-300">

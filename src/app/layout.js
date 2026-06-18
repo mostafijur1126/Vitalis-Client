@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import HeroUiThemeProvider from "@/components/providers/HeroUiThemeProvider";
 import Footer from "@/components/Footer";
+import { Toast } from "@heroui/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
           <main className="flex-1">{children}</main>
           <Footer></Footer>
         </HeroUiThemeProvider>
+        <Toast.Provider />
       </body>
     </html>
   );

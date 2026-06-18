@@ -12,6 +12,9 @@ import {
   FaTimesCircle,
   FaUserTag,
 } from "react-icons/fa";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "@heroui/react";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -20,6 +23,7 @@ export default function RegisterPage() {
   const [role, setRole] = useState("Member"); // Default role
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   // Password validation
   const hasMinLength = password.length >= 6;
@@ -27,11 +31,25 @@ export default function RegisterPage() {
   const hasLowerCase = /[a-z]/.test(password);
   const isPasswordValid = hasMinLength && hasUpperCase && hasLowerCase;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const registrationData = Object.fromEntries(formData.entries());
+    // console.log(registrationData);
+    // const { email, image, name, password, role } = registrationData;
     if (!isPasswordValid) return;
     // Send registration data with role to Better Auth
-    console.log("Register:", { name, email, image, role, password });
+    const { data, error } = await authClient.signUp.email({
+      ...registrationData,
+      plan: "free",
+    });
+    if (data) {
+      router.push("/");
+      toast.success("Registation success!");
+    } else if (error) {
+      toast.warning(error.message);
+    }
+    // console.log("Register:", { data, error });
   };
 
   return (
@@ -72,6 +90,7 @@ export default function RegisterPage() {
               <input
                 id="name"
                 type="text"
+                name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your full name"
@@ -95,6 +114,7 @@ export default function RegisterPage() {
               </div>
               <input
                 id="email"
+                name="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -119,6 +139,7 @@ export default function RegisterPage() {
               </div>
               <input
                 id="image"
+                name="image"
                 type="url"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
@@ -142,12 +163,13 @@ export default function RegisterPage() {
               </div>
               <select
                 id="role"
+                name="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 className="w-full pl-10 pr-3 py-2 bg-[#F5EDE6] dark:bg-[#3A3530] border border-[#E8E0D8] dark:border-[#4A4540] rounded-lg text-[#2D2A24] dark:text-[#EAE5DE] focus:outline-none focus:border-[#D4845A] transition-colors font-['Inter'] text-sm appearance-none"
               >
-                <option value="Member">Member</option>
-                <option value="Trainer">Trainer</option>
+                <option value="member">Member</option>
+                <option value="trainer">Trainer</option>
               </select>
               {/* Custom dropdown arrow (optional) */}
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -187,6 +209,7 @@ export default function RegisterPage() {
               </div>
               <input
                 id="password"
+                name="password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
