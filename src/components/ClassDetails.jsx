@@ -5,6 +5,7 @@ import { createCheckoutSession } from "@/lib/actions/createCheckout";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
   FaStar,
   FaHeart,
@@ -69,10 +70,11 @@ export default function ClassDetails({
           }),
         },
       );
-      console.log("Response status:", res.status);
+      // console.log("Response status:", res.status);
 
       const result = await res.json();
       setIsFavorite(result.isFavorite);
+      toast.success(result.message);
     } catch (err) {
       console.error("Favorite error:", err);
     } finally {
