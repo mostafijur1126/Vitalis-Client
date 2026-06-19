@@ -4,8 +4,8 @@ import React from "react";
 const DashboardLayout = ({ children }) => {
   return (
     <div className="flex">
-      <DashboardSibebar></DashboardSibebar>
-      <main>{children}</main>
+      <DashboardSibebar className="flex-1"></DashboardSibebar>
+      <main className="flex-1">{children}</main>
     </div>
   );
 };

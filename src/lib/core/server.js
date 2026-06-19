@@ -16,7 +16,7 @@ export const serverMutation = async (path, data, method = "POST") => {
     body: JSON.stringify(data),
   });
   const text = await res.text();
-  console.log("Response:", text);
+  // console.log("Response:", text);
 
   return JSON.parse(text);
   // const resData = res.json();

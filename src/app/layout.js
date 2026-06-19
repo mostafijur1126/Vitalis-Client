@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import HeroUiThemeProvider from "@/components/providers/HeroUiThemeProvider";
 import Footer from "@/components/Footer";
 import { Toast } from "@heroui/react";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({ children }) {
           <Footer></Footer>
         </HeroUiThemeProvider>
         <Toast.Provider />
+        <Toaster position="top-center" />
       </body>
     </html>
   );
