@@ -7,26 +7,30 @@ import { FaGoogle, FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "@heroui/react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const redirectUrl = searchParams.get("redirect") || "/";
     // Handle login logic here (Better Auth)
     const { data, error } = await authClient.signIn.email({
       email, // required
       password, // required
       rememberMe: true,
-      callbackURL: "/",
     });
     if (data) {
       toast.success("Login Successful!");
     } else if (error) {
       toast.warning(error.message);
     }
+    router.replace(redirectUrl);
   };
 
   const handleGoogleLogin = () => {

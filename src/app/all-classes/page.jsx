@@ -1,60 +1,12 @@
 import ClassCard from "@/components/ClassCard";
+import SearchClasses from "@/components/SearchClasses";
 import { getclasses } from "@/lib/api/allClass";
 
-// Dummy data for classes
-// const classes = [
-//   {
-//     id: 1,
-//     name: "Vinyasa Morning Flow",
-//     price: 25,
-//     trainer: "Sarah Jenkins",
-//     duration: "60 mins",
-//     bookings: 12,
-//   },
-//   {
-//     id: 2,
-//     name: "Peak Performance HIIT",
-//     price: 30,
-//     trainer: "Marcus Thorne",
-//     duration: "45 mins",
-//     bookings: 8,
-//   },
-//   {
-//     id: 3,
-//     name: "Core Reformer Session",
-//     price: 45,
-//     trainer: "Elena Rodriguez",
-//     duration: "50 mins",
-//     bookings: 5,
-//   },
-//   {
-//     id: 4,
-//     name: "Foundational Strength",
-//     price: 20,
-//     trainer: "David Chen",
-//     duration: "60 mins",
-//     bookings: 20,
-//   },
-//   {
-//     id: 5,
-//     name: "Endurance Revolution",
-//     price: 18,
-//     trainer: "Aria Vane",
-//     duration: "45 mins",
-//     bookings: 15,
-//   },
-//   {
-//     id: 6,
-//     name: "Mobility & Release",
-//     price: 15,
-//     trainer: "Julian Mars",
-//     duration: "30 mins",
-//     bookings: 30,
-//   },
-// ];
-
-export default async function AllClassesPage() {
-  const classes = await getclasses();
+export default async function AllClassesPage({ searchParams }) {
+  const params = await searchParams;
+  const search = (await params.search) || "";
+  const category = (await params.category) || "";
+  const classes = await getclasses(search, category);
   //   console.log(await classes);
   return (
     <div className="min-h-screen bg-[#FCF9F6] dark:bg-[#1E1C18] py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
@@ -71,21 +23,7 @@ export default async function AllClassesPage() {
         </div>
 
         {/* Search & Filter (static) */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <input
-            type="text"
-            placeholder="Search classes..."
-            className="flex-1 px-4 py-2 bg-white dark:bg-[#2D2A24] border border-[#E8E0D8] dark:border-[#3A3530] rounded-lg font-['Inter'] text-sm text-[#2D2A24] dark:text-[#EAE5DE] placeholder-[#8A847C] dark:placeholder-[#6B655A] focus:outline-none focus:border-[#D4845A] transition-colors"
-          />
-          <select className="px-4 py-2 bg-white dark:bg-[#2D2A24] border border-[#E8E0D8] dark:border-[#3A3530] rounded-lg font-['Inter'] text-sm text-[#2D2A24] dark:text-[#EAE5DE] focus:outline-none focus:border-[#D4845A] transition-colors">
-            <option>All Categories</option>
-            <option>Yoga</option>
-            <option>HIIT</option>
-            <option>Strength</option>
-            <option>Pilates</option>
-          </select>
-        </div>
-
+        <SearchClasses></SearchClasses>
         {/* Grid of class cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {classes.map((cls) => (

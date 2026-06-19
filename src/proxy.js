@@ -6,7 +6,9 @@ export async function proxy(request) {
   const session = await getUserSession();
   //   console.log(session);
   if (!session) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+    const loginUrl = new URL("/auth/login", request.url);
+    loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 }
 
