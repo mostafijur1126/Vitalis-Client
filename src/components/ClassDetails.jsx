@@ -4,6 +4,7 @@ import { bookClass } from "@/lib/actions/bookClasses";
 import { createCheckoutSession } from "@/lib/actions/createCheckout";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useState } from "react";
 import {
   FaStar,
   FaHeart,
@@ -18,8 +19,18 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 
-export default function ClassDetails({ classData: propClassData, isBooked }) {
+export default function ClassDetails({
+  classData: propClassData,
+  isBooked,
+  isFavorite: initialFavorite,
+  userId,
+  userName,
+  userEmail,
+}) {
   const data = propClassData;
+
+  const [isFavorite, setIsFavorite] = useState(initialFavorite);
+  const [favLoading, setFavLoading] = useState(false);
 
   // Static data (would come from backend in real app)
   const rating = 4.9;
@@ -32,18 +43,42 @@ export default function ClassDetails({ classData: propClassData, isBooked }) {
   const location = "Vitalis Wellness Center";
   const studio = "Studio A";
 
-  // const handelBookClass = async () => {
-  //   const bookData = {
-  //     ...data,
-  //     email: member?.email,
-  //     memberId: member?.id,
-  //     name: member?.name,
-  //     role: member?.role,
-  //   };
-  //   // console.log(bookData);
-  //   const result = await bookClass(bookData);
-  //   // console.log(result);
-  // };
+  const handleFavoriteToggle = async () => {
+    if (!userId) {
+      alert("Please login first!");
+      return;
+    }
+    setFavLoading(true);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/favorites`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            userName,
+            userEmail,
+            classId: data._id,
+            className: data.className,
+            classImage: data.classImage,
+            category: data.category,
+            price: data.price,
+            duration: data.duration,
+            author: data.author,
+          }),
+        },
+      );
+      console.log("Response status:", res.status);
+
+      const result = await res.json();
+      setIsFavorite(result.isFavorite);
+    } catch (err) {
+      console.error("Favorite error:", err);
+    } finally {
+      setFavLoading(false);
+    }
+  };
 
   return (
     <motion.div
@@ -272,9 +307,31 @@ export default function ClassDetails({ classData: propClassData, isBooked }) {
                   </button>
                 </form>
 
-                <button className="w-full py-3 border-2 border-[#D4845A] text-[#D4845A] font-['Inter'] font-semibold rounded-lg hover:bg-[#D4845A] hover:text-white transition-all flex items-center justify-center gap-2">
-                  <FaRegHeart className="w-4 h-4" />
-                  Add to Favorites
+                <button
+                  onClick={handleFavoriteToggle}
+                  disabled={favLoading}
+                  className={`w-full py-3 border-2 font-['Inter'] font-semibold rounded-lg transition-all flex items-center justify-center gap-2
+                    ${
+                      isFavorite
+                        ? "border-red-400 bg-red-50 text-red-500 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30"
+                        : "border-[#D4845A] text-[#D4845A] hover:bg-[#D4845A] hover:text-white"
+                    }
+                    ${favLoading ? "opacity-60 cursor-not-allowed" : ""}
+                  `}
+                >
+                  {favLoading ? (
+                    <span>Loading...</span>
+                  ) : isFavorite ? (
+                    <>
+                      <FaHeart className="w-4 h-4 text-red-500" />
+                      Remove from Favorites
+                    </>
+                  ) : (
+                    <>
+                      <FaRegHeart className="w-4 h-4" />
+                      Add to Favorites
+                    </>
+                  )}
                 </button>
               </div>
 
