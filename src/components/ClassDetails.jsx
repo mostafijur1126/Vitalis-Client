@@ -1,5 +1,7 @@
 "use client";
 
+import { bookClass } from "@/lib/actions/bookClasses";
+import { createCheckoutSession } from "@/lib/actions/createCheckout";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import {
@@ -16,25 +18,8 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 
-// Sample class data matching your API structure
-const classData = {
-  _id: "6a33d1f43c156cfa9a471657",
-  className: "Peak Performance HIIT",
-  author: "Marcus Thorne",
-  category: "HIIT",
-  classImage: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438",
-  description:
-    "High-intensity interval training designed to maximize calorie burn and improve endurance. Push your limits with explosive movements, strategic rest intervals, and progressive overload techniques. Marcus Thorne brings elite athletic training methodology to every session.",
-  difficultyLevel: "Advanced",
-  duration: 45,
-  price: 30,
-  slot: 20,
-  classSchedule: "Monday, Wednesday, Friday",
-  time: "06:00 AM",
-};
-
-export default function ClassDetails({ classData: propClassData }) {
-  const data = propClassData || classData;
+export default function ClassDetails({ classData: propClassData, isBooked }) {
+  const data = propClassData;
 
   // Static data (would come from backend in real app)
   const rating = 4.9;
@@ -46,6 +31,19 @@ export default function ClassDetails({ classData: propClassData }) {
   const intensity = "High";
   const location = "Vitalis Wellness Center";
   const studio = "Studio A";
+
+  // const handelBookClass = async () => {
+  //   const bookData = {
+  //     ...data,
+  //     email: member?.email,
+  //     memberId: member?.id,
+  //     name: member?.name,
+  //     role: member?.role,
+  //   };
+  //   // console.log(bookData);
+  //   const result = await bookClass(bookData);
+  //   // console.log(result);
+  // };
 
   return (
     <motion.div
@@ -248,14 +246,32 @@ export default function ClassDetails({ classData: propClassData }) {
 
               {/* Buttons */}
               <div className="space-y-3 pt-4 border-t border-[#E8E0D8] dark:border-[#3A3530]">
-                <form action={"/api/subscription"} method="POST">
+                <form action={createCheckoutSession}>
+                  {/* Hidden fields e class info pathao */}
+                  <input type="hidden" name="classId" value={data._id} />
+                  <input
+                    type="hidden"
+                    name="className"
+                    value={data.className}
+                  />
+                  <input type="hidden" name="trainer" value={data.author} />
+                  <input type="hidden" name="price" value={data.price} />
+                  <input type="hidden" name="duration" value={data.duration} />
+
                   <button
                     type="submit"
-                    className="w-full py-3 bg-[#D4845A] text-white font-['Inter'] font-semibold rounded-lg hover:bg-[#B86A42] transition-colors shadow-md hover:shadow-lg"
+                    disabled={isBooked}
+                    className={`w-full py-3 font-['Inter'] font-semibold rounded-lg transition-colors shadow-md
+                  ${
+                    isBooked
+                      ? "bg-gray-400 text-white cursor-not-allowed opacity-60"
+                      : "bg-[#D4845A] text-white hover:bg-[#B86A42] hover:shadow-lg"
+                  }`}
                   >
-                    Book Now
+                    {isBooked ? "✅ Already Booked" : "Book Now"}
                   </button>
                 </form>
+
                 <button className="w-full py-3 border-2 border-[#D4845A] text-[#D4845A] font-['Inter'] font-semibold rounded-lg hover:bg-[#D4845A] hover:text-white transition-all flex items-center justify-center gap-2">
                   <FaRegHeart className="w-4 h-4" />
                   Add to Favorites

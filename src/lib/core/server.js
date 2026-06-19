@@ -15,10 +15,10 @@ export const serverMutation = async (path, data, method = "POST") => {
     },
     body: JSON.stringify(data),
   });
-  const text = await res.text();
+  // const text = await res.text();
   // console.log("Response:", text);
 
-  return JSON.parse(text);
-  // const resData = res.json();
-  // return resData;
+  // return JSON.parse(text);
+  const resData = res.json();
+  return resData;
 };

@@ -5,13 +5,19 @@ import React from "react";
 
 const ClassDetailsPage = async ({ params }) => {
   const { id } = await params;
-  const user = await getUserSession();
-  //   console.log(id);
   const classDetails = await getclassesById(id);
-  //   console.log(classDetails);
+  const user = await getUserSession();
+  let isBooked = false;
+  if (user?.id) {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkBooking?userId=${user.id}&classId=${id}`,
+    );
+    const data = await res.json();
+    isBooked = data.isBooked;
+  }
   return (
     <div>
-      <ClassDetails classData={classDetails}></ClassDetails>
+      <ClassDetails classData={classDetails} isBooked={isBooked}></ClassDetails>
     </div>
   );
 };

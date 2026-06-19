@@ -9,8 +9,11 @@ import {
   FaClock,
   FaDollarSign,
 } from "react-icons/fa";
+import { bookClass } from "@/lib/actions/bookClasses";
+import toast from "react-hot-toast";
 
-export default async function Success({ searchParams }) {
+export default async function Success({ searchParams, params }) {
+  const { id } = await params;
   const { session_id } = await searchParams;
 
   if (!session_id)
@@ -28,17 +31,35 @@ export default async function Success({ searchParams }) {
     return redirect("/");
   }
 
-  if (status === "complete") {
-    await CreateSubscriptions({ ...metadata, sessionId: session_id });
+  const { className, trainer, price, duration, classId, userId, userName } =
+    metadata;
 
-    // Extract metadata (assumes you passed these in the checkout session)
-    const {
-      className = "Fitness Class",
-      trainer = "Expert Trainer",
-      price = "0",
-      duration = "60",
-      classId = "",
-    } = metadata;
+  if (status === "complete") {
+    const checkRes = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkBooking?userId=${userId}&classId=${classId}`,
+    );
+    const { isBooking } = await checkRes.json();
+
+    if (!isBooking) {
+      const bookData = {
+        classId,
+        className,
+        trainer,
+        price,
+        duration,
+        userEmail: customerEmail,
+        userId,
+        userName,
+        paymentStatus: "paid",
+        sessionId: session_id,
+        bookedAt: new Date(),
+      };
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bookClass`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookData),
+      });
+    }
 
     return (
       <div className="min-h-screen bg-[#FCF9F6] dark:bg-[#1E1C18] flex items-center justify-center px-4 py-12 transition-colors duration-300">
@@ -124,7 +145,7 @@ export default async function Success({ searchParams }) {
               View My Bookings
             </Link>
             <Link
-              href="/classes"
+              href="/all-classes"
               className="flex-1 text-center py-3 border-2 border-[#D4845A] text-[#D4845A] font-['Inter'] font-semibold rounded-lg hover:bg-[#D4845A] hover:text-white transition-all"
             >
               Browse More Classes
