@@ -19,7 +19,6 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const redirectUrl = searchParams.get("redirect") || "/";
-    // Handle login logic here (Better Auth)
     const { data, error } = await authClient.signIn.email({
       email, // required
       password, // required
@@ -27,15 +26,18 @@ const LoginPage = () => {
     });
     if (data) {
       toast.success("Login Successful!");
+      router.replace(redirectUrl);
     } else if (error) {
       toast.warning(error.message);
     }
-    router.replace(redirectUrl);
   };
 
-  const handleGoogleLogin = () => {
-    // Handle Google login with Better Auth
-    console.log("Google login clicked");
+  const handleGoogleLogin = async () => {
+    const redirectUrl = searchParams.get("redirect") || "/";
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: redirectUrl,
+    });
   };
 
   return (

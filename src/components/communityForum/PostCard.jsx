@@ -7,16 +7,20 @@ import { FaUserCircle, FaHeart, FaComment, FaArrowRight } from "react-icons/fa";
 
 export default function PostCard({ post }) {
   const {
-    id,
+    status,
+    _id,
     title,
-    excerpt,
-    author,
+    description,
+    userName,
+    userRole,
+    userImage,
     createdAt,
-    category,
     image,
-    likes = 0,
-    comments = 0,
+    likes = [],
+    comments = [],
   } = post;
+  const totalLikes = likes?.length || 0;
+  const totalComments = comments?.length || 0;
 
   // Format time ago
   const timeAgo = (date) => {
@@ -45,10 +49,12 @@ export default function PostCard({ post }) {
       <div className="p-6 flex-1 flex flex-col">
         {/* Author & Date */}
         <div className="flex items-center gap-3 mb-3">
-          {author?.avatar ? (
-            <img
-              src={author.avatar}
-              alt={author.name}
+          {userImage ? (
+            <Image
+              src={userImage}
+              alt={userName}
+              width={50}
+              height={50}
               className="w-10 h-10 rounded-full object-cover border-2 border-[#D4845A]"
             />
           ) : (
@@ -56,12 +62,12 @@ export default function PostCard({ post }) {
           )}
           <div>
             <p className="font-['Inter'] font-semibold text-[#2D2A24] dark:text-[#EAE5DE] text-sm">
-              {author?.name || "Anonymous"}
+              {userName || "Anonymous"}
             </p>
             <div className="flex items-center gap-2 text-xs text-[#6B655A] dark:text-[#B8B0A6]">
-              {author?.role && (
+              {userRole && (
                 <span className="font-['Inter'] font-medium text-[#D4845A] bg-[#D4845A]/10 dark:bg-[#D4845A]/20 px-2 py-0.5 rounded-full">
-                  {author.role}
+                  {userRole}
                 </span>
               )}
               <span>•</span>
@@ -73,7 +79,7 @@ export default function PostCard({ post }) {
         {/* Title */}
         <h3 className="font-['Playfair_Display'] text-xl font-bold text-[#2D2A24] dark:text-[#EAE5DE] mb-2">
           <Link
-            href={`/forum/${id}`}
+            href={`/forum/${_id}`}
             className="hover:text-[#D4845A] transition-colors"
           >
             {title}
@@ -82,21 +88,21 @@ export default function PostCard({ post }) {
 
         {/* Excerpt */}
         <p className="font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6] leading-relaxed line-clamp-3 flex-1 mb-3">
-          {excerpt || "No description available."}
+          {description || "No description available."}
         </p>
 
         {/* Footer: likes, comments, read more */}
         <div className="flex items-center justify-between text-sm font-['Inter'] text-[#6B655A] dark:text-[#B8B0A6] pt-3 border-t border-[#E8E0D8] dark:border-[#3A3530]">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <FaHeart className="w-4 h-4 text-[#D4845A]" /> {likes}
+              <FaHeart className="w-4 h-4 text-[#D4845A]" /> {totalLikes}
             </span>
             <span className="flex items-center gap-1">
-              <FaComment className="w-4 h-4 text-[#D4845A]" /> {comments}
+              <FaComment className="w-4 h-4 text-[#D4845A]" /> {totalComments}
             </span>
           </div>
           <Link
-            href={`/forum/${id}`}
+            href={`/forum/${_id}`}
             className="flex items-center gap-1 text-[#D4845A] hover:text-[#B86A42] font-medium transition-colors"
           >
             Read More <FaArrowRight className="w-3.5 h-3.5" />

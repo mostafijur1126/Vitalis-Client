@@ -47,7 +47,6 @@ export default function CreatePostPage() {
       userImage: user?.image,
       userRole: user?.role,
     };
-    console.log("Publishing post:", formData);
     // TODO: Send to API
     try {
       const result = await addForumPosts(formData);

@@ -13,5 +13,5 @@ export async function proxy(request) {
 }
 
 export const config = {
-  matcher: "/all-classes/:path",
+  matcher: ["/all-classes/:path", "/forum/:path"],
 };
