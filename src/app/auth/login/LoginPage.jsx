@@ -8,20 +8,17 @@ import { FcGoogle } from "react-icons/fc";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "@heroui/react";
 import { useRouter, useSearchParams } from "next/navigation";
-
+export const dynamic = "force-dynamic";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [redirectUrl, setRedirectUrl] = useState("/");
 
-  useEffect(() => {
-    setRedirectUrl(searchParams.get("redirect") || "/");
-  }, [searchParams]);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const redirectUrl = searchParams.get("redirect") || "/";
     // Handle login logic here (Better Auth)
     const { data, error } = await authClient.signIn.email({
       email, // required

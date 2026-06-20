@@ -15,7 +15,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "@heroui/react";
-
+export const dynamic = "force-dynamic";
 const RegisterClient = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

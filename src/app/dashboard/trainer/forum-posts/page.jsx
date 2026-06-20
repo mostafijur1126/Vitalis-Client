@@ -8,6 +8,7 @@ import { imageUpload } from "@/lib/imgUpload";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { addForumPosts } from "@/lib/actions/forumPosts";
+import toast from "react-hot-toast";
 
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
@@ -28,6 +29,10 @@ export default function CreatePostPage() {
     if (fileInput) fileInput.value = "";
   };
 
+  const resetForm = () => {
+    (setTitle(""), setDescription(""), setImage(null));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid) return;
@@ -45,9 +50,15 @@ export default function CreatePostPage() {
     console.log("Publishing post:", formData);
     // TODO: Send to API
     try {
-      const result = await addForumPosts();
-      console.log(result);
-    } catch {}
+      const result = await addForumPosts(formData);
+      if (result.insertedId) {
+        toast.success("Class added successfully!");
+        resetForm();
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Faild to add class");
+    }
     // Reset form or redirect
   };
 
