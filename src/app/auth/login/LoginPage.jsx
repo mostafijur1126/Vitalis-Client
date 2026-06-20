@@ -15,10 +15,13 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [redirectUrl, setRedirectUrl] = useState("/");
 
+  useEffect(() => {
+    setRedirectUrl(searchParams.get("redirect") || "/");
+  }, [searchParams]);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const redirectUrl = searchParams.get("redirect") || "/";
     // Handle login logic here (Better Auth)
     const { data, error } = await authClient.signIn.email({
       email, // required
