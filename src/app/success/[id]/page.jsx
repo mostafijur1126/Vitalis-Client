@@ -31,8 +31,16 @@ export default async function Success({ searchParams, params }) {
     return redirect("/");
   }
 
-  const { className, trainer, price, duration, classId, userId, userName } =
-    metadata;
+  const {
+    className,
+    image,
+    trainer,
+    price,
+    duration,
+    classId,
+    userId,
+    userName,
+  } = metadata;
 
   if (status === "complete") {
     const checkRes = await fetch(
@@ -47,10 +55,12 @@ export default async function Success({ searchParams, params }) {
         trainer,
         price,
         duration,
+        image,
         userEmail: customerEmail,
         userId,
         userName,
         paymentStatus: "paid",
+        status: "pending",
         sessionId: session_id,
         bookedAt: new Date(),
       };
@@ -139,7 +149,7 @@ export default async function Success({ searchParams, params }) {
           {/* Action Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
-              href="/dashboard/bookings"
+              href="/dashboard/member/bookings"
               className="flex-1 text-center py-3 bg-[#D4845A] text-white font-['Inter'] font-semibold rounded-lg hover:bg-[#B86A42] transition-colors shadow-md hover:shadow-lg"
             >
               View My Bookings

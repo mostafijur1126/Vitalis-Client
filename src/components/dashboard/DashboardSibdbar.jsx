@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -10,7 +10,6 @@ import {
   FaHeart,
   FaUserGraduate,
   FaSignOutAlt,
-  FaBars,
   FaTimes,
   FaChalkboardTeacher,
   FaPlusCircle,
@@ -21,29 +20,21 @@ import {
   FaBuilding,
   FaCog,
   FaUsers,
-  FaUserCircle,
 } from "react-icons/fa";
 
 const navItemsByRole = {
   member: [
-    { name: "Overview", icon: FaHome, href: "/dashboard" },
-    { name: "Bookings", icon: FaBook, href: "/dashboard/bookings" },
-    { name: "Favorites", icon: FaHeart, href: "/dashboard/favorites" },
+    { name: "Overview", icon: FaHome, href: "/dashboard/member" },
+    { name: "Bookings", icon: FaBook, href: "/dashboard/member/bookings" },
+    { name: "Favorites", icon: FaHeart, href: "/dashboard/member/favorites" },
     {
       name: "Apply as Trainer",
       icon: FaUserGraduate,
-      href: "/dashboard/apply-trainer",
+      href: "/dashboard/member/apply-trainer",
     },
   ],
   trainer: [
     { name: "Overview", icon: FaHome, href: "/dashboard/trainer" },
-    { name: "Bookings", icon: FaBook, href: "/dashboard/trainer/bookings" },
-    { name: "Favorites", icon: FaHeart, href: "/dashboard/trainer/favorites" },
-    {
-      name: "Apply as Trainer",
-      icon: FaUserGraduate,
-      href: "/dashboard/trainer/apply",
-    },
     {
       name: "My Classes",
       icon: FaChalkboardTeacher,
@@ -87,8 +78,7 @@ const navItemsByRole = {
   ],
 };
 
-export default function DashboardLayout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+export default function DashboardSidebar({ isOpen, onClose }) {
   const pathname = usePathname();
   const router = useRouter();
   const { data } = authClient.useSession();
@@ -96,10 +86,14 @@ export default function DashboardLayout({ children }) {
   const role = (user?.role || "member").toLowerCase();
   const navItems = navItemsByRole[role] || navItemsByRole.member;
 
-  // Close sidebar on route change (mobile)
   useEffect(() => {
-    setSidebarOpen(false);
+    onClose();
   }, [pathname]);
+
+  const isActive = (href) => {
+    if (href === "/dashboard") return pathname === "/dashboard";
+    return pathname.startsWith(href);
+  };
 
   const onSignOut = async () => {
     await authClient.signOut({
@@ -109,121 +103,90 @@ export default function DashboardLayout({ children }) {
     });
   };
 
-  const isActive = (href) => {
-    if (href === "/dashboard") return pathname === "/dashboard";
-    return pathname.startsWith(href);
-  };
+  const NavLinks = () => (
+    <>
+      <nav className="flex-1 px-4 py-6 space-y-1">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={onClose}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-['Inter'] text-sm font-medium transition-all ${
+                isActive(item.href)
+                  ? "bg-[#D4845A] text-white shadow-md"
+                  : "text-[#2D2A24] dark:text-[#EAE5DE] hover:bg-[#F5EDE6] dark:hover:bg-[#3A3530]"
+              }`}
+            >
+              <Icon className="w-5 h-5" />
+              {item.name}
+            </Link>
+          );
+        })}
+      </nav>
 
-  const renderNavItems = () =>
-    navItems.map((item) => {
-      const Icon = item.icon;
-      return (
-        <Link
-          key={item.name}
-          href={item.href}
-          onClick={() => setSidebarOpen(false)}
-          className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-['Inter'] text-sm font-medium transition-all ${
-            isActive(item.href)
-              ? "bg-[#D4845A] text-white shadow-md"
-              : "text-[#2D2A24] dark:text-[#EAE5DE] hover:bg-[#F5EDE6] dark:hover:bg-[#3A3530]"
-          }`}
+      <div className="p-4 border-t border-[#E8E0D8] dark:border-[#3A3530]">
+        <button
+          onClick={onSignOut}
+          className="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg font-['Inter'] text-sm font-medium text-[#C47A6A] hover:bg-[#F5EDE6] dark:hover:bg-[#3A3530] transition-colors"
         >
-          <Icon className="w-5 h-5" />
-          {item.name}
-        </Link>
-      );
-    });
+          <FaSignOutAlt className="w-5 h-5" />
+          Sign Out
+        </button>
+      </div>
+    </>
+  );
 
   return (
-    <div className="min-h-screen bg-[#FCF9F6] dark:bg-[#1E1C18] flex transition-colors duration-300">
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex md:flex-col md:w-64 bg-white dark:bg-[#2D2A24] border-r border-[#E8E0D8] dark:border-[#3A3530] h-screen sticky top-0 overflow-y-auto transition-colors duration-300">
-        <div className="flex flex-col h-full">
-          <Link href="/" onClick={() => setSidebarOpen(false)}>
-            <div className="p-6 border-b border-[#E8E0D8] dark:border-[#3A3530]">
-              <h1 className="font-['Playfair_Display'] text-2xl font-bold text-[#D4845A]">
-                VITALIS
-              </h1>
-              <p className="font-['Inter'] text-xs text-[#6B655A] dark:text-[#B8B0A6]">
-                Gym Management
-              </p>
-            </div>
-          </Link>
-          <nav className="flex-1 px-4 py-6 space-y-1">{renderNavItems()}</nav>
-          <div className="p-4 border-t border-[#E8E0D8] dark:border-[#3A3530]">
-            <div>
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="md:hidden text-[#2D2A24] dark:text-[#EAE5DE]"
-              >
-                <FaBars size={24} />
-              </button>
-              <div className="flex items-center gap-3">
-                {user?.image ? (
-                  <img
-                    src={user.image}
-                    alt={user.name}
-                    className="w-8 h-8 rounded-full object-cover border-2 border-[#D4845A]"
-                  />
-                ) : (
-                  <FaUserCircle className="w-8 h-8 text-[#D4845A]" />
-                )}
-                <span className="font-['Inter'] text-sm text-[#2D2A24] dark:text-[#EAE5DE] hidden sm:inline">
-                  {user?.name || "User"}
-                </span>
-              </div>
-            </div>
-            <button
-              onClick={onSignOut}
-              className="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg font-['Inter'] text-sm font-medium text-[#C47A6A] hover:bg-[#F5EDE6] dark:hover:bg-[#3A3530] transition-colors"
-            >
-              <FaSignOutAlt className="w-5 h-5" />
-              Sign Out
-            </button>
+    <>
+      <aside className="hidden md:flex md:flex-col md:w-64 bg-white dark:bg-[#2D2A24] border-r border-[#E8E0D8] dark:border-[#3A3530] h-screen sticky top-0 overflow-y-auto">
+        <Link href="/">
+          <div className="p-6 border-b border-[#E8E0D8] dark:border-[#3A3530]">
+            <h1 className="font-['Playfair_Display'] text-2xl font-bold text-[#D4845A]">
+              VITALIS
+            </h1>
+            <p className="font-['Inter'] text-xs text-[#6B655A] dark:text-[#B8B0A6]">
+              Gym Management
+            </p>
           </div>
+        </Link>
+        <div className="flex flex-col flex-1">
+          <NavLinks />
         </div>
       </aside>
 
-      {/* Mobile overlay */}
-      {sidebarOpen && (
+      {/* ========== MOBILE ========== */}
+
+      {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
-          onClick={() => setSidebarOpen(false)}
+          onClick={onClose}
         />
       )}
 
-      {/* Mobile Sidebar Drawer */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-[#2D2A24] z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-[#2D2A24] z-50 flex flex-col
+          transform transition-transform duration-300 ease-in-out md:hidden
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-4 border-b border-[#E8E0D8] dark:border-[#3A3530]">
-            <Link href="/" onClick={() => setSidebarOpen(false)}>
-              <h1 className="font-['Playfair_Display'] text-2xl font-bold text-[#D4845A]">
-                VITALIS
-              </h1>
-            </Link>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="text-[#2D2A24] dark:text-[#EAE5DE]"
-            >
-              <FaTimes size={24} />
-            </button>
-          </div>
-          <nav className="flex-1 px-4 py-6 space-y-1">{renderNavItems()}</nav>
-          <div className="p-4 border-t border-[#E8E0D8] dark:border-[#3A3530]">
-            <button
-              onClick={onSignOut}
-              className="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg font-['Inter'] text-sm font-medium text-[#C47A6A] hover:bg-[#F5EDE6] dark:hover:bg-[#3A3530] transition-colors"
-            >
-              <FaSignOutAlt className="w-5 h-5" />
-              Sign Out
-            </button>
-          </div>
+        <div className="flex items-center justify-between p-4 border-b border-[#E8E0D8] dark:border-[#3A3530]">
+          <Link href="/" onClick={onClose}>
+            <h1 className="font-['Playfair_Display'] text-2xl font-bold text-[#D4845A]">
+              VITALIS
+            </h1>
+          </Link>
+
+          <button
+            onClick={onClose}
+            className="text-[#2D2A24] dark:text-[#EAE5DE] hover:text-[#D4845A] transition-colors"
+          >
+            <FaTimes size={22} />
+          </button>
         </div>
+
+        <NavLinks />
       </aside>
-    </div>
+    </>
   );
 }

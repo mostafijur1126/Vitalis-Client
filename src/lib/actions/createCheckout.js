@@ -17,6 +17,7 @@ export async function createCheckoutSession(formData) {
   const trainer = formData.get("trainer");
   const price = formData.get("price");
   const duration = formData.get("duration");
+  const image = formData.get("image");
 
   const PRICE_ID = "price_1TjgfHCRS2C5nrZAmvjqawSr";
 
@@ -32,6 +33,7 @@ export async function createCheckoutSession(formData) {
       trainer,
       price,
       duration,
+      image,
     },
     mode: "subscription",
     success_url: `${origin}/success/${classId}?session_id={CHECKOUT_SESSION_ID}`,

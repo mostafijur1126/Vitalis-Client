@@ -294,6 +294,7 @@ export default function ClassDetails({
                   <input type="hidden" name="trainer" value={data.author} />
                   <input type="hidden" name="price" value={data.price} />
                   <input type="hidden" name="duration" value={data.duration} />
+                  <input type="hidden" name="image" value={data.classImage} />
 
                   <button
                     type="submit"
