@@ -7,59 +7,23 @@ import {
   FaCalendarPlus,
   FaClock,
   FaHeart,
-  FaMapMarkerAlt,
   FaUserCircle,
   FaCalendarAlt,
 } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import { getTrainerApplication } from "@/lib/api/getTrainerApplication";
-
-// Dummy data – replace with real API calls
-const dummyUser = {
-  name: "Elena Rossi",
-  email: "elena.rossi@wellness.it",
-  image: null, // or URL
-  role: "Premium Member",
-  memberSince: "January 2024",
-  homeGym: "Vitalis Milan",
-};
-
-const dummyStats = {
-  totalBookedClasses: 42,
-  totalFavorites: 18,
-};
-
-const dummyTrainerApplication = {
-  status: "Pending", // "Pending", "Approved", "Rejected"
-  feedback: "", // only shown if Rejected
-};
-
-const dummyUpcomingClasses = [
-  {
-    id: 1,
-    name: "Vinyasa Flow Yoga",
-    level: "Advanced Level",
-    date: "Tomorrow, Oct 24",
-    time: "08:00 AM - 09:15 AM",
-    trainer: "Marco V.",
-  },
-  {
-    id: 2,
-    name: "Morning HIIT Circuit",
-    level: "High Intensity",
-    date: "Friday, Oct 25",
-    time: "07:00 AM - 08:00 AM",
-    trainer: "Sarah J.",
-  },
-];
+import { getMyBookings } from "@/lib/api/myBookingClass";
+import { getFavoriteClass } from "@/lib/api/favoriteClass";
 
 export default function DashboardOverview() {
+  const [bookings, setBookings = {}] = useState([]);
+  const [favorites, setFavorites = {}] = useState([]);
+
   const { data } = authClient.useSession();
-  const user = data?.user || dummyUser;
+  const user = data?.user;
   const [application, setApplication] = useState([]);
   const { status, feedback } = ({} = application);
-  const upcomingClasses = dummyUpcomingClasses;
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.id) return;
@@ -68,6 +32,36 @@ export default function DashboardOverview() {
     };
     fetchData();
   }, [user?.id]);
+
+  //total-booking
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const fetchBookings = async () => {
+      try {
+        const result = await getMyBookings(user.id);
+        setBookings(result);
+      } catch (err) {
+        setError(err.message || "Failed to load bookings");
+      }
+    };
+
+    fetchBookings();
+  }, [user?.id, setBookings]);
+
+  //total favorite
+  useEffect(() => {
+    if (!user?.id) return;
+    const favorites = async () => {
+      try {
+        const result = await getFavoriteClass(user.id);
+        setFavorites(result);
+      } catch {
+        setError(err.message || "Failed to load favorite");
+      }
+    };
+    favorites();
+  }, [user.id, setFavorites]);
 
   // Determine status badge color
   const getStatusColor = (status = "") => {
@@ -94,7 +88,7 @@ export default function DashboardOverview() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="font-['Playfair_Display'] text-3xl md:text-4xl font-bold text-[#2D2A24] dark:text-[#EAE5DE]">
-            Welcome back, {user.name.split(" ")[0]}
+            Welcome back, {user?.name.split(" ")[0]}
           </h1>
           <p className="font-['Inter'] text-[#6B655A] dark:text-[#B8B0A6] mt-1">
             Your wellness journey continues. You have{" "}
@@ -122,7 +116,7 @@ export default function DashboardOverview() {
               Total Booked Classes
             </p>
             <p className="font-['Inter'] text-2xl font-bold text-[#2D2A24] dark:text-[#EAE5DE]">
-              stats.totalBookedClasses
+              {bookings.length}
             </p>
           </div>
         </div>
@@ -135,7 +129,7 @@ export default function DashboardOverview() {
               Total Favorites
             </p>
             <p className="font-['Inter'] text-2xl font-bold text-[#2D2A24] dark:text-[#EAE5DE]">
-              stats.totalFavorites
+              {favorites.length}
             </p>
           </div>
         </div>
@@ -146,12 +140,12 @@ export default function DashboardOverview() {
         {/* Profile Card */}
         <div className="lg:col-span-2 bg-white dark:bg-[#2D2A24] rounded-xl p-6 shadow-sm border border-[#E8E0D8] dark:border-[#3A3530]">
           <div className="flex items-center gap-4">
-            {user.image ? (
+            {user?.image ? (
               <Image
                 width={200}
                 height={200}
-                src={user.image}
-                alt={user.name}
+                src={user?.image}
+                alt={user?.name}
                 className="w-16 h-16 rounded-full object-cover border-2 border-[#D4845A]"
               />
             ) : (
@@ -159,13 +153,13 @@ export default function DashboardOverview() {
             )}
             <div>
               <h3 className="font-['Inter'] text-xl font-semibold text-[#2D2A24] dark:text-[#EAE5DE]">
-                {user.name}
+                {user?.name}
               </h3>
               <p className="font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6]">
-                {user.email}
+                {user?.email}
               </p>
               <span className="inline-block mt-1 px-3 py-0.5 bg-[#D4845A]/10 dark:bg-[#D4845A]/20 text-[#D4845A] text-xs font-medium rounded-full">
-                {user.role || "User"}
+                {user?.role || "User"}
               </span>
             </div>
           </div>
@@ -176,16 +170,7 @@ export default function DashboardOverview() {
                 <strong className="text-[#2D2A24] dark:text-[#EAE5DE]">
                   Member Since
                 </strong>{" "}
-                {user.memberSince || "N/A"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FaMapMarkerAlt className="w-4 h-4 text-[#D4845A]" />
-              <span>
-                <strong className="text-[#2D2A24] dark:text-[#EAE5DE]">
-                  Home Gym
-                </strong>{" "}
-                {user.homeGym || "N/A"}
+                {user?.memberSince || "N/A"}
               </span>
             </div>
           </div>
@@ -230,7 +215,7 @@ export default function DashboardOverview() {
       <div className="bg-white dark:bg-[#2D2A24] rounded-xl shadow-sm border border-[#E8E0D8] dark:border-[#3A3530] overflow-hidden">
         <div className="p-4 border-b border-[#E8E0D8] dark:border-[#3A3530] flex items-center justify-between">
           <h3 className="font-['Inter'] font-semibold text-[#2D2A24] dark:text-[#EAE5DE]">
-            Upcoming Classes
+            Last booked Classes
           </h3>
           <Link
             href="/dashboard/bookings"
@@ -250,7 +235,7 @@ export default function DashboardOverview() {
               </tr>
             </thead>
             <tbody>
-              {upcomingClasses.length === 0 ? (
+              {bookings.length === 0 ? (
                 <tr>
                   <td
                     colSpan="4"
@@ -260,36 +245,35 @@ export default function DashboardOverview() {
                   </td>
                 </tr>
               ) : (
-                upcomingClasses.map((cls) => (
-                  <tr
-                    key={cls.id}
-                    className="border-b border-[#E8E0D8] dark:border-[#3A3530] hover:bg-[#F5EDE6] dark:hover:bg-[#3A3530] transition-colors"
-                  >
-                    <td className="py-4 px-4">
-                      <p className="font-medium text-[#2D2A24] dark:text-[#EAE5DE]">
-                        {cls.name}
-                      </p>
-                      <p className="text-xs text-[#6B655A] dark:text-[#B8B0A6]">
-                        {cls.level}
-                      </p>
-                    </td>
-                    <td className="py-4 px-4 text-[#2D2A24] dark:text-[#EAE5DE]">
-                      {cls.date}
-                      <br />
-                      <span className="text-xs text-[#6B655A] dark:text-[#B8B0A6]">
-                        {cls.time}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 text-[#2D2A24] dark:text-[#EAE5DE]">
-                      {cls.trainer}
-                    </td>
-                    <td className="py-4 px-4 text-right">
-                      <button className="px-4 py-1.5 border border-[#D4845A] text-[#D4845A] rounded-lg text-xs font-medium hover:bg-[#D4845A] hover:text-white transition-colors">
-                        Modify
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                bookings
+                  ?.slice(-2)
+                  .reverse()
+                  .map((cls) => (
+                    <tr
+                      key={cls._id}
+                      className="border-b border-[#E8E0D8] dark:border-[#3A3530] hover:bg-[#F5EDE6] dark:hover:bg-[#3A3530] transition-colors"
+                    >
+                      <td className="py-4 px-4">
+                        <p className="font-medium text-[#2D2A24] dark:text-[#EAE5DE]">
+                          {cls.className}
+                        </p>
+                        <p className="text-xs text-[#6B655A] dark:text-[#B8B0A6]">
+                          {cls.duration}
+                        </p>
+                      </td>
+                      <td className="py-4 px-4 text-[#2D2A24] dark:text-[#EAE5DE]">
+                        {cls.bookedAt}
+                      </td>
+                      <td className="py-4 px-4 text-[#2D2A24] dark:text-[#EAE5DE]">
+                        {cls.trainer}
+                      </td>
+                      <td className="py-4 px-4 text-right">
+                        <button className="px-4 py-1.5 border border-[#D4845A] text-[#D4845A] rounded-lg text-xs font-medium hover:bg-[#D4845A] hover:text-white transition-colors">
+                          Modify
+                        </button>
+                      </td>
+                    </tr>
+                  ))
               )}
             </tbody>
           </table>
