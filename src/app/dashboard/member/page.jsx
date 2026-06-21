@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import { getTrainerApplication } from "@/lib/api/getTrainerApplication";
 
 // Dummy data – replace with real API calls
 const dummyUser = {
@@ -56,15 +57,21 @@ const dummyUpcomingClasses = [
 export default function DashboardOverview() {
   const { data } = authClient.useSession();
   const user = data?.user || dummyUser;
-
-  // In a real app, fetch these from an API
-  const stats = dummyStats;
-  const trainerApp = dummyTrainerApplication;
+  const [application, setApplication] = useState([]);
+  const { status, feedback } = ({} = application);
   const upcomingClasses = dummyUpcomingClasses;
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user?.id) return;
+      const application = await getTrainerApplication(user.id);
+      setApplication(application);
+    };
+    fetchData();
+  }, [user?.id]);
 
   // Determine status badge color
-  const getStatusColor = (status) => {
-    switch (status) {
+  const getStatusColor = (status = "") => {
+    switch (status.toLowerCase()) {
       case "Pending":
         return "bg-[#D4A050] text-white";
       case "Approved":
@@ -115,7 +122,7 @@ export default function DashboardOverview() {
               Total Booked Classes
             </p>
             <p className="font-['Inter'] text-2xl font-bold text-[#2D2A24] dark:text-[#EAE5DE]">
-              {stats.totalBookedClasses}
+              stats.totalBookedClasses
             </p>
           </div>
         </div>
@@ -128,7 +135,7 @@ export default function DashboardOverview() {
               Total Favorites
             </p>
             <p className="font-['Inter'] text-2xl font-bold text-[#2D2A24] dark:text-[#EAE5DE]">
-              {stats.totalFavorites}
+              stats.totalFavorites
             </p>
           </div>
         </div>
@@ -193,24 +200,24 @@ export default function DashboardOverview() {
             <div className="mt-2">
               <span
                 className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                  trainerApp.status,
+                  status,
                 )}`}
               >
-                {trainerApp.status}
+                {status}
               </span>
             </div>
-            {trainerApp.status === "Rejected" && trainerApp.feedback && (
+            {status === "Rejected" && feedback && (
               <p className="mt-3 font-['Inter'] text-sm text-[#C47A6A]">
-                {trainerApp.feedback}
+                {feedback}
               </p>
             )}
-            {trainerApp.status === "Pending" && (
+            {status === "Pending" && (
               <p className="mt-3 font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6]">
                 Your application is under review. Expect a response within 48
                 hours.
               </p>
             )}
-            {trainerApp.status === "Approved" && (
+            {status === "Approved" && (
               <p className="mt-3 font-['Inter'] text-sm text-[#A68B6E]">
                 Congratulations! You are now a trainer.
               </p>
