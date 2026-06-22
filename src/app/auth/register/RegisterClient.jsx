@@ -35,13 +35,18 @@ const RegisterClient = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const registrationData = Object.fromEntries(formData.entries());
-    // console.log(registrationData);
-    // const { email, image, name, password, role } = registrationData;
     if (!isPasswordValid) return;
     // Send registration data with role to Better Auth
     const { data, error } = await authClient.signUp.email({
-      ...registrationData,
-      plan: "free",
+      email: registrationData.email, // required
+      password: registrationData.password, // required
+      name: registrationData.name, // required
+      image: registrationData.image, // required
+      data: {
+        role: registrationData.role || "member",
+        plan: "free",
+        status: "active",
+      },
     });
     if (data) {
       router.push("/");

@@ -69,7 +69,7 @@ const navItemsByRole = {
     {
       name: "Manage Users",
       icon: FaUsers,
-      href: "/dashboard/admin/analytics",
+      href: "/dashboard/admin/manageUsers",
     },
     {
       name: "Applied Trainers",

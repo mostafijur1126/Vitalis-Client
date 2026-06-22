@@ -20,6 +20,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { getAllUsers } from "@/lib/api/user";
 import Image from "next/image";
+import { getclasses } from "@/lib/api/allClass";
 
 const COLORS = ["#D4845A", "#A68B6E", "#C9A87C", "#E8C4A8"];
 
@@ -28,6 +29,7 @@ export default function AdminDashboardPage() {
   const user = session?.user;
 
   const [users, setUsers] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,6 +37,8 @@ export default function AdminDashboardPage() {
     const fetchData = async () => {
       try {
         const data = await getAllUsers();
+        const classes = await getclasses();
+        setClasses(classes);
         setUsers(data);
       } catch (err) {
         console.error(err);
@@ -49,6 +53,7 @@ export default function AdminDashboardPage() {
   const trainerCount = users.filter((u) => u.role === "trainer").length;
   const memberCount = users.filter((u) => u.role === "member").length;
   const totalUsers = users.length;
+  const totalClasses = classes.length;
 
   const roleData = [
     { name: "Admin", value: adminCount },
@@ -87,12 +92,15 @@ export default function AdminDashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {[
           { label: "Total Users", value: totalUsers, icon: FaUsers },
-          { label: "Admins", value: adminCount, icon: FaUserCircle },
-          { label: "Trainers", value: trainerCount, icon: FaCheckCircle },
-          { label: "Members", value: memberCount, icon: FaMoneyBillWave },
+          { label: "Total Classes", value: totalClasses, icon: FaUserCircle },
+          {
+            label: "Total Booked Classes",
+            value: trainerCount,
+            icon: FaCheckCircle,
+          },
         ].map((stat) => (
           <div
             key={stat.label}
