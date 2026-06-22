@@ -184,13 +184,13 @@ export default function TrainerDashboardPage() {
           <FaList className="w-4 h-4" /> My Classes
         </Link>
         <Link
-          href="/dashboard/trainer/add-forum-post"
+          href="/dashboard/trainer/forum-posts"
           className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-[#2D2A24] border border-[#D4845A] text-[#D4845A] font-['Inter'] font-medium rounded-lg hover:bg-[#D4845A] hover:text-white transition-colors shadow-sm"
         >
           <FaPlus className="w-4 h-4" /> Add Forum Post
         </Link>
         <Link
-          href="/dashboard/trainer/my-forum-posts"
+          href="/dashboard/trainer/my-posts"
           className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-[#2D2A24] border border-[#D4845A] text-[#D4845A] font-['Inter'] font-medium rounded-lg hover:bg-[#D4845A] hover:text-white transition-colors shadow-sm"
         >
           <FaEdit className="w-4 h-4" /> My Posts

@@ -21,7 +21,14 @@ import {
   FaCog,
   FaUsers,
 } from "react-icons/fa";
-import { LuGalleryHorizontalEnd } from "react-icons/lu";
+import { LuFileUser, LuGalleryHorizontalEnd } from "react-icons/lu";
+import {
+  MdOutlineManageAccounts,
+  MdOutlineManageSearch,
+  MdPostAdd,
+} from "react-icons/md";
+import { SiGoogleclassroom } from "react-icons/si";
+import { TbTransactionDollar } from "react-icons/tb";
 
 const navItemsByRole = {
   member: [
@@ -58,24 +65,42 @@ const navItemsByRole = {
     },
   ],
   admin: [
-    { name: "Dashboard", icon: FaHome, href: "/dashboard/admin" },
+    { name: "Overview", icon: FaChartLine, href: "/dashboard/admin" },
     {
-      name: "Analytics",
-      icon: FaChartLine,
+      name: "Manage Users",
+      icon: FaUsers,
       href: "/dashboard/admin/analytics",
     },
-    { name: "Trainers", icon: FaUsers, href: "/dashboard/admin/trainers" },
     {
-      name: "Memberships",
-      icon: FaIdCard,
+      name: "Applied Trainers",
+      icon: LuFileUser,
+      href: "/dashboard/admin/trainers",
+    },
+    {
+      name: "Manage Trainers",
+      icon: MdOutlineManageAccounts,
       href: "/dashboard/admin/memberships",
     },
     {
-      name: "Facilities",
-      icon: FaBuilding,
+      name: "Manage Classes",
+      icon: SiGoogleclassroom,
       href: "/dashboard/admin/facilities",
     },
-    { name: "Settings", icon: FaCog, href: "/dashboard/admin/settings" },
+    {
+      name: "Add Forum Post",
+      icon: MdPostAdd,
+      href: "/dashboard/admin/settings",
+    },
+    {
+      name: "Transactions",
+      icon: TbTransactionDollar,
+      href: "/dashboard/admin/settings",
+    },
+    {
+      name: "Forum Post Manage",
+      icon: MdOutlineManageSearch,
+      href: "/dashboard/admin/settings",
+    },
   ],
 };
 
