@@ -63,27 +63,6 @@ export default function TrainerDashboardPage() {
     loadData();
   }, [trainerId]);
 
-  // useEffect(() => {
-  //   if (!trainerId) return;
-
-  //   const loadData = async () => {
-  //     try {
-  //       // const myclasses = await getMyclasses(trainerId);
-  //       const [statsData, classesData] = await Promise.all([
-  //         fetchTrainerStats(trainerId),
-  //       ]);
-  //       // setClasses(myclasses);
-  //       setRecentClasses(classesData.slice(0, 3));
-  //     } catch (err) {
-  //       setError(err.message || "Failed to load dashboard data");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   // loadData();
-  // }, [trainerId]);
-
   const getStatusColor = (status) => {
     switch (status) {
       case "approved":

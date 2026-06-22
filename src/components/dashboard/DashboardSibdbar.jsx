@@ -54,7 +54,7 @@ const navItemsByRole = {
     {
       name: "My Forum Posts",
       icon: LuGalleryHorizontalEnd,
-      href: "/dashboard/trainer/management",
+      href: "/dashboard/trainer/my-posts",
     },
   ],
   admin: [

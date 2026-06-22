@@ -9,12 +9,14 @@ import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { addForumPosts } from "@/lib/actions/forumPosts";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const router = useRouter();
 
   const isFormValid = title.trim() !== "" && description.trim() !== "";
 
@@ -51,6 +53,7 @@ export default function CreatePostPage() {
       if (result.insertedId) {
         toast.success("Class added successfully!");
         resetForm();
+        router.push("/dashboard/trainer/my-posts");
       }
     } catch (error) {
       console.error(error);

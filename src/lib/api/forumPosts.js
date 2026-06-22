@@ -9,6 +9,5 @@ export const getForumsPostById = async (id) => {
 };
 
 export const getMyForumPost = async (userId) => {
-  console.log("frontend", userId);
   return serverFetch(`/api/my-forumPost?userId=${userId}`);
 };

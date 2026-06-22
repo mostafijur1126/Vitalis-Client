@@ -328,6 +328,7 @@ export default function ForumPostDetailsPage() {
                     fill
                     className="object-cover"
                     priority
+                    unoptimized
                   />
                 </div>
               )}

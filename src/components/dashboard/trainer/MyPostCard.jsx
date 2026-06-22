@@ -3,9 +3,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaUserCircle, FaHeart, FaComment, FaArrowRight } from "react-icons/fa";
+import {
+  FaUserCircle,
+  FaHeart,
+  FaComment,
+  FaArrowRight,
+  FaTrash,
+} from "react-icons/fa";
+import { DeletePostModal } from "./DeletePostModal";
 
-export default function PostCard({ post }) {
+export default function MyPostCard({ post }) {
   const {
     status,
     _id,
@@ -19,6 +26,7 @@ export default function PostCard({ post }) {
     likes = [],
     comments = [],
   } = post;
+
   const totalLikes = likes?.length || 0;
   const totalComments = comments?.length || 0;
 
@@ -36,8 +44,12 @@ export default function PostCard({ post }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="bg-white dark:bg-[#2D2A24] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-[#E8E0D8] dark:border-[#3A3530] flex flex-col"
+      className="bg-white dark:bg-[#2D2A24] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-[#E8E0D8] dark:border-[#3A3530] flex flex-col relative"
     >
+      {/* Delete Button */}
+
+      <DeletePostModal post={post}></DeletePostModal>
+
       {/* Post Image */}
       {image && (
         <div className="relative w-full h-48 bg-[#F5EDE6] dark:bg-[#3A3530]">
@@ -59,8 +71,8 @@ export default function PostCard({ post }) {
             <Image
               src={userImage}
               alt={userName}
-              width={50}
-              height={50}
+              width={40}
+              height={40}
               className="w-10 h-10 rounded-full object-cover border-2 border-[#D4845A]"
             />
           ) : (
