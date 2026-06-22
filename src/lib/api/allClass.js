@@ -22,3 +22,7 @@ export const getclasses = async (search = "", category = "") => {
 export const getclassesById = async (id) => {
   return serverFetch(`/api/all-classes/${id}`);
 };
+
+export const getMyclasses = async (trainerId) => {
+  return serverFetch(`/api/getmyclasses?trainerId=${trainerId}`);
+};

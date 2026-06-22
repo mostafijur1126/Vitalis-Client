@@ -7,3 +7,8 @@ export const getForumPosts = async () => {
 export const getForumsPostById = async (id) => {
   return serverFetch(`/api/forumPost/${id}`);
 };
+
+export const getMyForumPost = async (userId) => {
+  console.log("frontend", userId);
+  return serverFetch(`/api/my-forumPost?userId=${userId}`);
+};

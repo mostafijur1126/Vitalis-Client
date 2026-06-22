@@ -16,6 +16,7 @@ export default async function ClassCard({ cls }) {
           alt={className}
           height={400}
           width={550}
+          unoptimized
           className="w-full h-full object-cover"
         />
       </div>

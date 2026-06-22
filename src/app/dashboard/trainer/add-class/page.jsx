@@ -75,6 +75,11 @@ export default function AddClassPage() {
       classSchedule: selectedDays.join(", "),
       time: time + " AM",
       author: user.role,
+      authorId: user.id,
+      authorName: user.name,
+      authorImage: user.image,
+      autorEmail: user.email,
+      status: "panding",
     };
     try {
       const addClass = await CreateClasses(formData);
@@ -145,10 +150,11 @@ export default function AddClassPage() {
                 ) : classImage ? (
                   <div className="relative w-full h-48 rounded-lg overflow-hidden border">
                     <Image
-                      width={400}
-                      height={200}
+                      width={500}
+                      height={500}
                       src={classImage}
                       alt="Class preview"
+                      unoptimized
                       className="w-full h-full object-cover"
                     />
 

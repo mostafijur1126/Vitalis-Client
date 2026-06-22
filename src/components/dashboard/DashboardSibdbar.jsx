@@ -21,6 +21,7 @@ import {
   FaCog,
   FaUsers,
 } from "react-icons/fa";
+import { LuGalleryHorizontalEnd } from "react-icons/lu";
 
 const navItemsByRole = {
   member: [
@@ -51,8 +52,8 @@ const navItemsByRole = {
       href: "/dashboard/trainer/forum-posts",
     },
     {
-      name: "Management Tools",
-      icon: FaTools,
+      name: "My Forum Posts",
+      icon: LuGalleryHorizontalEnd,
       href: "/dashboard/trainer/management",
     },
   ],

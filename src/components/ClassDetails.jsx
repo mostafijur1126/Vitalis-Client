@@ -37,7 +37,6 @@ export default function ClassDetails({
   const rating = 4.9;
   const reviews = 124;
   const capacity = 12;
-  const booked = 15;
   const equipment = "Dumbbells, Mat, Timer";
   const language = "English";
   const intensity = "High";
@@ -96,6 +95,7 @@ export default function ClassDetails({
             src={data.classImage}
             alt={data.className}
             fill
+            unoptimized
             className="w-full h-75 object-cover"
           />
         </div>

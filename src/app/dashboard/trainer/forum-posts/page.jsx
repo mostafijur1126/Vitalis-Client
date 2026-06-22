@@ -37,17 +37,15 @@ export default function CreatePostPage() {
     e.preventDefault();
     if (!isFormValid) return;
 
-    // Prepare data for API
     const formData = {
       title,
       description,
       image,
-      // author will come from auth context
       userName: user?.name,
       userImage: user?.image,
       userRole: user?.role,
+      userId: user?.id,
     };
-    // TODO: Send to API
     try {
       const result = await addForumPosts(formData);
       if (result.insertedId) {
@@ -58,7 +56,6 @@ export default function CreatePostPage() {
       console.error(error);
       toast.error("Faild to add class");
     }
-    // Reset form or redirect
   };
 
   return (
@@ -131,6 +128,7 @@ export default function CreatePostPage() {
                   height={200}
                   src={image}
                   alt="image preview"
+                  unoptimized
                   className="w-full h-full object-cover"
                 />
                 <button
