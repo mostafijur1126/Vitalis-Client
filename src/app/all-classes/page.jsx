@@ -7,7 +7,6 @@ export default async function AllClassesPage({ searchParams }) {
   const search = (await params.search) || "";
   const category = (await params.category) || "";
   const classes = await getclasses(search, category);
-  console.log(classes);
   return (
     <div className="min-h-screen bg-[#FCF9F6] dark:bg-[#1E1C18] py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto">

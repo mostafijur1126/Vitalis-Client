@@ -156,7 +156,7 @@ export default function BookingsPage() {
                     </td>
                     <td className="py-4 px-4 text-right">
                       <Link
-                        href={`/dashboard/bookings/${booking._id}`}
+                        href={`/all-classes/${booking.classId}`}
                         className="inline-block px-4 py-1.5 border border-[#D4845A] text-[#D4845A] rounded-lg text-xs font-medium hover:bg-[#D4845A] hover:text-white transition-colors"
                       >
                         View Details
