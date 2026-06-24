@@ -1,11 +1,22 @@
 import ClassDetails from "@/components/ClassDetails";
 import { getclassesById } from "@/lib/api/allClass";
+import { auth } from "@/lib/auth";
 import { getUserSession } from "@/lib/core/session";
+import { headers } from "next/headers";
 import React from "react";
+import toast from "react-hot-toast";
 
 const ClassDetailsPage = async ({ params }) => {
   const { id } = await params;
-  const classDetails = await getclassesById(id);
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+
+  if (!token) {
+    toast.error("Authentication failed. Please login again.");
+    return;
+  }
+  const classDetails = await getclassesById(id, token);
   const user = await getUserSession();
 
   let isBooked = false;

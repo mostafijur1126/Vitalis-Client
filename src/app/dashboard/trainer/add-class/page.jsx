@@ -63,6 +63,12 @@ export default function AddClassPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { data: token } = await authClient.token();
+
+    if (!token) {
+      toast.error("Authentication failed. Please login again.");
+      return;
+    }
     const formData = {
       className,
       classImage,
@@ -82,7 +88,7 @@ export default function AddClassPage() {
       status: "panding",
     };
     try {
-      const addClass = await CreateClasses(formData);
+      const addClass = await CreateClasses(formData, token);
       if (addClass.insertedId) {
         toast.success("Class added successfully!");
         resetForm();

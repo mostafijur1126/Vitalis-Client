@@ -38,7 +38,12 @@ export default function BookingsPage() {
 
     const fetchBookings = async () => {
       try {
-        const result = await getMyBookings(user.id);
+        const { data: token } = await authClient.token();
+        if (!token) {
+          toast.error("Authentication failed. Please login again.");
+          return;
+        }
+        const result = await getMyBookings(user.id, token.token);
         // Only keep bookings with paymentStatus === "paid"
         const paidBookings = Array.isArray(result)
           ? result.filter((b) => b.paymentStatus?.toLowerCase() === "paid")

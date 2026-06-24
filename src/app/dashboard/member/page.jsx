@@ -19,15 +19,22 @@ import { getFavoriteClass } from "@/lib/api/favoriteClass";
 export default function DashboardOverview() {
   const [bookings, setBookings = {}] = useState([]);
   const [favorites, setFavorites = {}] = useState([]);
+  const [error, setError] = useState(null);
 
   const { data } = authClient.useSession();
   const user = data?.user;
-  const [application, setApplication] = useState([]);
-  const { status, feedback } = ({} = application);
+  const [application, setApplication] = useState({});
+  const { status, feedback } = application;
+
   useEffect(() => {
+    if (!user?.id) return;
     const fetchData = async () => {
-      if (!user?.id) return;
-      const application = await getTrainerApplication(user.id);
+      const { data: token } = await authClient.token();
+      if (!token) {
+        toast.error("Authentication failed. Please login again.");
+        return;
+      }
+      const application = await getTrainerApplication(user.id, token.token);
       setApplication(application);
     };
     fetchData();
@@ -37,31 +44,28 @@ export default function DashboardOverview() {
   useEffect(() => {
     if (!user?.id) return;
 
-    const fetchBookings = async () => {
+    const fetchAll = async () => {
       try {
-        const result = await getMyBookings(user.id);
-        setBookings(result);
+        const { data: token } = await authClient.token();
+        if (!token) {
+          toast.error("Authentication failed. Please login again.");
+          return;
+        }
+
+        const [bookingResult, favoriteResult] = await Promise.all([
+          getMyBookings(user.id, token.token),
+          getFavoriteClass(user.id, token.token),
+        ]);
+
+        setBookings(bookingResult);
+        setFavorites(favoriteResult);
       } catch (err) {
-        setError(err.message || "Failed to load bookings");
+        setError(err.message || "Failed to load data");
       }
     };
 
-    fetchBookings();
-  }, [user?.id, setBookings]);
-
-  //total favorite
-  useEffect(() => {
-    if (!user?.id) return;
-    const favorites = async () => {
-      try {
-        const result = await getFavoriteClass(user?.id);
-        setFavorites(result);
-      } catch {
-        setError(err.message || "Failed to load favorite");
-      }
-    };
-    favorites();
-  }, [user?.id, setFavorites]);
+    fetchAll();
+  }, [user?.id, setBookings, setFavorites]);
 
   // Determine status badge color
   const getStatusColor = (status = "") => {
@@ -188,7 +192,7 @@ export default function DashboardOverview() {
                   status,
                 )}`}
               >
-                {status}
+                {status || "Not apply Yet"}
               </span>
             </div>
             {status === "Rejected" && feedback && (

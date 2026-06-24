@@ -18,7 +18,7 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import { getForumsPostById } from "@/lib/api/forumPosts";
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
@@ -61,7 +61,13 @@ export default function ForumPostDetailsPage() {
     if (!postId) return;
     const fetchPost = async () => {
       try {
-        const data = await getForumsPostById(postId);
+        const { data: token } = await authClient.token();
+
+        if (!token) {
+          toast.error("Authentication failed. Please login again.");
+          return;
+        }
+        const data = await getForumsPostById(postId, token.token);
         setPost(data);
         setComments(data.comments || []);
         setLikeCount(data.likes?.length || 0);

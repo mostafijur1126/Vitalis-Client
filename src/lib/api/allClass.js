@@ -19,8 +19,15 @@ export const getclasses = async (search = "", category = "") => {
   return res.json();
 };
 
-export const getclassesById = async (id) => {
-  return serverFetch(`/api/all-classes/${id}`);
+export const getclassesById = async (id, token) => {
+  const res = await fetch(`${baseUrl}/api/all-classes/${id}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+  // handel 401 , 403
+  const data = await res.json();
+  return data;
 };
 
 export const getMyclasses = async (trainerId) => {

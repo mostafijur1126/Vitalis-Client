@@ -2,8 +2,8 @@
 
 import { serverMutation } from "../core/server";
 
-export const CreateClasses = async (data) => {
-  return serverMutation("/api/add-class", data);
+export const CreateClasses = async (data, token) => {
+  return serverMutation("/api/add-class", data, token);
 };
 
 export const TrainerApplication = async (data) => {

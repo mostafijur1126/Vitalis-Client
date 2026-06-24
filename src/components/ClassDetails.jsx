@@ -249,9 +249,10 @@ export default function ClassDetails({
                   {data.classSchedule}
                 </p>
                 <p className="font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6] pl-6">
-                  {data.time} — {data.time.split(" ")[0]}:
-                  {parseInt(data.time.split(":")[0]) + 1}
-                  :00 {data.time.split(" ")[1] || "AM"}
+                  {data?.time
+                    ? `${data.time} — ${data.time.split(" ")[0]}:
+       ${parseInt(data.time.split(":")[0]) + 1}:00 ${data.time.split(" ")[1] || "AM"}`
+                    : "Time not set"}
                 </p>
               </div>
 
