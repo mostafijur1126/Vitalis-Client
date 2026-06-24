@@ -3,8 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { serverMutation } from "../core/server";
 
-export const UpdateClass = async (id, data) => {
-  const result = serverMutation(`/api/all-classes/${id}`, data, "PATCH");
-  revalidatePath("");
+export const UpdateClass = async (id, data, token) => {
+  const result = await serverMutation(
+    `/api/all-classes/${id}`,
+    data,
+    token,
+    "PATCH",
+  );
   return result;
 };

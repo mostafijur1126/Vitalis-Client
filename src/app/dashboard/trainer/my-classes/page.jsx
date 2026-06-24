@@ -16,9 +16,10 @@ import {
 } from "react-icons/fa";
 import { TfiMoney } from "react-icons/tfi";
 import { authClient } from "@/lib/auth-client";
-import { getMyclasses } from "@/lib/api/allClass";
+import { getMyBookedclasses, getMyclasses } from "@/lib/api/allClass";
 import EditModal from "@/components/dashboard/trainer/EditModal";
 import { DeleteClassModal } from "@/components/dashboard/trainer/DeleteClassModal";
+import toast from "react-hot-toast";
 
 export default function MyClassesPage() {
   const { data: session } = authClient.useSession();
@@ -26,6 +27,7 @@ export default function MyClassesPage() {
   const trainerId = user?.id;
 
   const [classes, setClasses] = useState([]);
+  console.log(classes);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -35,7 +37,12 @@ export default function MyClassesPage() {
 
     const loadClasses = async () => {
       try {
-        const data = await getMyclasses(trainerId);
+        const { data: token } = await authClient.token();
+        if (!token) {
+          toast.error("authentication faild. please login again.");
+        }
+        // const data = await getMyclasses(trainerId, token.token);
+        const data = await getMyBookedclasses(trainerId, token.token);
         setClasses(data);
       } catch (err) {
         setError(err.message || "Failed to load classes");
@@ -224,7 +231,7 @@ export default function MyClassesPage() {
                     {/* Bookings */}
                     <td className="py-4 px-4">
                       <span className="font-medium text-[#2D2A24] dark:text-[#EAE5DE]">
-                        {cls.bookedCount || 0}
+                        {cls.totalBookings || 0}
                       </span>
                       <span className="text-[#6B655A] dark:text-[#B8B0A6]">
                         /{cls.slot}

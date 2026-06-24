@@ -20,7 +20,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { getAllUsers } from "@/lib/api/user";
 import Image from "next/image";
-import { getclasses } from "@/lib/api/allClass";
+import { getclasses, getTotalBookings } from "@/lib/api/allClass";
 
 const COLORS = ["#D4845A", "#A68B6E", "#C9A87C", "#E8C4A8"];
 
@@ -30,14 +30,18 @@ export default function AdminDashboardPage() {
 
   const [users, setUsers] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [totalBookings, seTotalBookings] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
     const fetchData = async () => {
       try {
-        const data = await getAllUsers();
+        const { data: token } = await authClient.token();
+        const data = await getAllUsers(token.token);
         const classes = await getclasses();
+        const bookings = await getTotalBookings();
+        seTotalBookings(bookings);
         setClasses(classes);
         setUsers(data);
       } catch (err) {
@@ -98,7 +102,7 @@ export default function AdminDashboardPage() {
           { label: "Total Classes", value: totalClasses, icon: FaUserCircle },
           {
             label: "Total Booked Classes",
-            value: trainerCount,
+            value: totalBookings?.totalBookings,
             icon: FaCheckCircle,
           },
         ].map((stat) => (

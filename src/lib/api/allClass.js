@@ -2,6 +2,10 @@ import { serverFetch } from "../core/server";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
+export const getFeaturedClass = async () => {
+  return serverFetch(`/api/featured-classes`);
+};
+
 // export const getclasses = async () => {
 //   return serverFetch(`/api/all-class`);
 // };
@@ -30,6 +34,15 @@ export const getclassesById = async (id, token) => {
   return data;
 };
 
-export const getMyclasses = async (trainerId) => {
-  return serverFetch(`/api/getmyclasses?trainerId=${trainerId}`);
+export const getMyclasses = async (trainerId, token) => {
+  return serverFetch(`/api/getmyclasses?trainerId=${trainerId}`, token);
+};
+export const getMyBookedclasses = async (trainerId, token) => {
+  return serverFetch(`/api/trainer/classes/bookings/${trainerId}`, token);
+};
+export const getTrainerTotalBookings = async (trainerId) => {
+  return serverFetch(`/trainer/total-bookings/${trainerId}`);
+};
+export const getTotalBookings = async () => {
+  return serverFetch(`/admin/total-bookings`);
 };

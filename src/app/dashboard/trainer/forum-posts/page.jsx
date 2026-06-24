@@ -49,7 +49,11 @@ export default function CreatePostPage() {
       userId: user?.id,
     };
     try {
-      const result = await addForumPosts(formData);
+      const { data: token } = await authClient.token();
+      if (!token) {
+        toast.error("authentication faild, please login again.");
+      }
+      const result = await addForumPosts(formData, token.token);
       if (result.insertedId) {
         toast.success("Class added successfully!");
         resetForm();

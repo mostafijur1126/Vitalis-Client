@@ -88,7 +88,7 @@ export default function AddClassPage() {
       status: "panding",
     };
     try {
-      const addClass = await CreateClasses(formData, token);
+      const addClass = await CreateClasses(formData, token.token);
       if (addClass.insertedId) {
         toast.success("Class added successfully!");
         resetForm();

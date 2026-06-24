@@ -75,7 +75,11 @@ const EditModal = ({ classes, onUpdated }) => {
     };
 
     try {
-      const data = await UpdateClass(classes._id, updatedData);
+      const { data: token } = await authClient.token();
+      if (!token) {
+        toast.error("Authentication faild, please login again");
+      }
+      const data = await UpdateClass(classes._id, updatedData, token.token);
       //   console.log(data);
 
       if (data.modifiedCount > 0) {

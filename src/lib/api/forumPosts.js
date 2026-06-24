@@ -8,6 +8,6 @@ export const getForumsPostById = async (id, token) => {
   return serverFetch(`/api/forumPost/${id}`, token);
 };
 
-export const getMyForumPost = async (userId) => {
-  return serverFetch(`/api/my-forumPost?userId=${userId}`);
+export const getMyForumPost = async (userId, token) => {
+  return serverFetch(`/api/my-forumPost?userId=${userId}`, token);
 };

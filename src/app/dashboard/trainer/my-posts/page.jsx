@@ -3,11 +3,16 @@ import { FaPlus } from "react-icons/fa";
 import MyPostCard from "@/components/dashboard/trainer/MyPostCard";
 import { getMyForumPost } from "@/lib/api/forumPosts";
 import { getUserSession } from "@/lib/core/session";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export default async function MyPostsPage() {
   const user = await getUserSession();
   const trainerId = user?.id;
-  const myForumPosts = (await getMyForumPost(trainerId)) || [];
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+  const myForumPosts = (await getMyForumPost(trainerId, token)) || [];
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">

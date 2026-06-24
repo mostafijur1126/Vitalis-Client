@@ -17,7 +17,7 @@ export const serverMutation = async (path, data, token, method = "POST") => {
     method: method,
     headers: {
       "Content-Type": "application/json",
-      ...(token && { authorization: `Bearer ${token?.token}` }),
+      ...(token && { authorization: `Bearer ${token}` }),
     },
     body: JSON.stringify(data),
   });

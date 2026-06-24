@@ -4,31 +4,11 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  FaChalkboardTeacher,
-  FaUsers,
-  FaComments,
-  FaPlus,
-  FaList,
-  FaEdit,
-  FaSpinner,
-  FaUser,
-  FaCalendarAlt,
-  FaClock,
-  FaDollarSign,
-} from "react-icons/fa";
+import { FaPlus, FaList, FaEdit, FaSpinner, FaUser } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
-import { getMyclasses } from "@/lib/api/allClass";
+import { getMyclasses, getTrainerTotalBookings } from "@/lib/api/allClass";
 import { getMyForumPost } from "@/lib/api/forumPosts";
-
-// Dummy API functions – replace with real calls
-const fetchTrainerStats = async (trainerId) => {
-  return {
-    totalClasses: 5,
-    totalStudents: 2,
-    forumPosts: 3,
-  };
-};
+import toast from "react-hot-toast";
 
 export default function TrainerDashboardPage() {
   const { data: session } = authClient.useSession();
@@ -37,12 +17,8 @@ export default function TrainerDashboardPage() {
 
   const [classes, setClasses] = useState({});
   const [forunPosts, setForumPosts] = useState({});
+  const [totalBookings, setTotalBookings] = useState({});
 
-  const [stats, setStats] = useState({
-    totalClasses: 0,
-    totalStudents: 0,
-    forumPosts: 0,
-  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -50,8 +26,14 @@ export default function TrainerDashboardPage() {
     if (!trainerId) return;
     const loadData = async () => {
       try {
-        const myclasses = await getMyclasses(trainerId);
-        const myForumPosts = await getMyForumPost(trainerId);
+        const { data: token } = await authClient.token();
+        if (!token) {
+          toast.error("Authentication faild, please login again");
+        }
+        const myclasses = await getMyclasses(trainerId, token.token);
+        const myForumPosts = await getMyForumPost(trainerId, token.token);
+        const myTotalBookings = await getTrainerTotalBookings(trainerId);
+        setTotalBookings(myTotalBookings);
         setForumPosts(myForumPosts);
         setClasses(myclasses);
       } catch (err) {
@@ -123,7 +105,7 @@ export default function TrainerDashboardPage() {
         </div>
         <div className="bg-white dark:bg-[#2D2A24] rounded-xl p-4 shadow-sm border border-[#E8E0D8] dark:border-[#3A3530] text-center">
           <p className="font-['Playfair_Display'] text-3xl font-bold text-[#D4845A]">
-            {stats.totalStudents}
+            {totalBookings.totalBookings}
           </p>
           <p className="font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6]">
             Total Students Enrolled

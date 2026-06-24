@@ -1,5 +1,5 @@
 import { serverFetch } from "../core/server";
 
-export const getAllUsers = () => {
-  return serverFetch("/api/all-users");
+export const getAllUsers = (token) => {
+  return serverFetch("/api/all-users", token);
 };

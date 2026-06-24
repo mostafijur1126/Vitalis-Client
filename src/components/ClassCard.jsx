@@ -6,7 +6,15 @@ export default async function ClassCard({ cls }) {
   const user = await getUserSession();
   // console.log(user);
   // console.log(cls);
-  const { className, price, author, duration, slot, classImage } = cls;
+  const {
+    className,
+    price,
+    author,
+    duration,
+    slot,
+    totalBookings,
+    classImage,
+  } = cls;
   return (
     <div className="bg-white dark:bg-[#2D2A24] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-[#E8E0D8] dark:border-[#3A3530] flex flex-col">
       {/* Image placeholder */}
@@ -39,7 +47,7 @@ export default async function ClassCard({ cls }) {
         <div className="mt-2 flex items-center gap-4 text-sm font-['Inter'] text-[#6B655A] dark:text-[#B8B0A6]">
           <span>{duration}</span>
           <span>•</span>
-          <span>📋 {slot} Booked</span>
+          <span>📋 {totalBookings} Booked</span>
         </div>
 
         <Link href={`/all-classes/${cls._id}`}>

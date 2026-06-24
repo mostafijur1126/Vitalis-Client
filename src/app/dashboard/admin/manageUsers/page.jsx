@@ -28,7 +28,8 @@ export default function ManageUsersPage() {
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const data = await getAllUsers();
+        const { data: token } = await authClient.token();
+        const data = await getAllUsers(token.token);
         setUsers(data);
         setFilteredUsers(data);
       } catch (err) {
