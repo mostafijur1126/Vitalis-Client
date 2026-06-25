@@ -1,10 +1,19 @@
 import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { admin, jwt } from "better-auth/plugins";
+import { jwt, admin } from "better-auth/plugins";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 const db = client.db(process.env.AUTH_DB_NAME);
+
+const adminPlugin = admin();
+if (adminPlugin.schema?.user?.fields?.role) {
+  adminPlugin.schema.user.fields.role = {
+    ...adminPlugin.schema.user.fields.role,
+    input: true,
+    defaultValue: "member",
+  };
+}
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
@@ -18,7 +27,7 @@ export const auth = betterAuth({
       maxAge: 60 * 24 * 30,
     },
   },
-  plugins: [admin(), jwt()],
+  plugins: [jwt(), adminPlugin],
   emailAndPassword: {
     enabled: true,
   },

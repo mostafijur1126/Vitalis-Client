@@ -20,6 +20,7 @@ import { imageUpload } from "@/lib/imgUpload";
 import { authClient } from "@/lib/auth-client";
 import { CreateClasses } from "@/lib/actions/addClasses";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function AddClassPage() {
   // Form state
@@ -35,6 +36,7 @@ export default function AddClassPage() {
   const [selectedDays, setSelectedDays] = useState([]);
 
   const [uploading, setUploading] = useState(false);
+  const router = useRouter();
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
@@ -92,6 +94,7 @@ export default function AddClassPage() {
       if (addClass.insertedId) {
         toast.success("Class added successfully!");
         resetForm();
+        router.push("/dashboard/trainer/my-classes");
       }
     } catch (error) {
       console.error(error);
@@ -223,8 +226,7 @@ export default function AddClassPage() {
                   <option value="HIIT">HIIT</option>
                   <option value="Weights">Weights</option>
                   <option value="Pilates">Pilates</option>
-                  <option value="Cardio">Cardio</option>
-                  <option value="Stretching">Stretching</option>
+                  <option value="Strength">Strength</option>
                 </select>
               </div>
             </div>

@@ -45,7 +45,7 @@ export default function ClassDetails({
 
   const handleFavoriteToggle = async () => {
     if (!userId) {
-      alert("Please login first!");
+      toast.success("Please login first!");
       return;
     }
     setFavLoading(true);

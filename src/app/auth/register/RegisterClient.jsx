@@ -10,7 +10,6 @@ import {
   FaLock,
   FaCheckCircle,
   FaTimesCircle,
-  FaUserTag,
 } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
@@ -20,7 +19,7 @@ const RegisterClient = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState("");
-  const [role, setRole] = useState("Member"); // Default role
+  const [role, setRole] = useState("member"); // Default role
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
@@ -42,19 +41,16 @@ const RegisterClient = () => {
       password: registrationData.password, // required
       name: registrationData.name, // required
       image: registrationData.image, // required
-      data: {
-        role: registrationData.role || "member",
-        plan: "free",
-        status: "active",
-      },
+      plan: "free",
+      status: "active",
     });
     if (data) {
       router.push("/");
       toast.success("Registation success!");
     } else if (error) {
       toast.warning(error.message);
+      console.log(error);
     }
-    // console.log("Register:", { data, error });
   };
 
   return (
@@ -152,52 +148,6 @@ const RegisterClient = () => {
                 className="w-full pl-10 pr-3 py-2 bg-[#F5EDE6] dark:bg-[#3A3530] border border-[#E8E0D8] dark:border-[#4A4540] rounded-lg text-[#2D2A24] dark:text-[#EAE5DE] placeholder-[#8A847C] dark:placeholder-[#6B655A] focus:outline-none focus:border-[#D4845A] transition-colors font-['Inter'] text-sm"
               />
             </div>
-          </div>
-
-          {/* Role Selection */}
-          <div>
-            <label
-              htmlFor="role"
-              className="font-['Inter'] text-sm font-medium text-[#2D2A24] dark:text-[#EAE5DE] block mb-1"
-            >
-              Role
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaUserTag className="h-5 w-5 text-[#6B655A] dark:text-[#B8B0A6]" />
-              </div>
-              <select
-                id="role"
-                name="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 bg-[#F5EDE6] dark:bg-[#3A3530] border border-[#E8E0D8] dark:border-[#4A4540] rounded-lg text-[#2D2A24] dark:text-[#EAE5DE] focus:outline-none focus:border-[#D4845A] transition-colors font-['Inter'] text-sm appearance-none"
-              >
-                <option value="member">Member</option>
-                <option value="trainer">Trainer</option>
-              </select>
-              {/* Custom dropdown arrow (optional) */}
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <svg
-                  className="h-5 w-5 text-[#6B655A] dark:text-[#B8B0A6]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </div>
-            <p className="mt-1 font-['Inter'] text-xs text-[#6B655A] dark:text-[#B8B0A6]">
-              {role === "Trainer"
-                ? "You'll be able to create and manage classes, and post in the forum."
-                : "You'll discover classes, book sessions, and engage with the community."}
-            </p>
           </div>
 
           {/* Password */}

@@ -100,6 +100,7 @@ export default function Navbar() {
                       alt={user.name}
                       width={32}
                       height={32}
+                      unoptimized
                       className="rounded-full object-cover border-2 border-[#D4845A]"
                     />
                   ) : (

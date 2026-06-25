@@ -19,7 +19,7 @@ export default function MyPostCard({ post }) {
     title,
     description,
     userName,
-    userRole,
+    role,
     userImage,
     createdAt,
     image,
@@ -83,9 +83,9 @@ export default function MyPostCard({ post }) {
               {userName || "Anonymous"}
             </p>
             <div className="flex items-center gap-2 text-xs text-[#6B655A] dark:text-[#B8B0A6]">
-              {userRole && (
+              {role && (
                 <span className="font-['Inter'] font-medium text-[#D4845A] bg-[#D4845A]/10 dark:bg-[#D4845A]/20 px-2 py-0.5 rounded-full">
-                  {userRole}
+                  {role}
                 </span>
               )}
               <span>•</span>

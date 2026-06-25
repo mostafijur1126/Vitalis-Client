@@ -15,21 +15,28 @@ export async function POST(request) {
     const trainer = formData.get("trainer");
     const price = formData.get("price");
     const duration = formData.get("duration");
+    const image = formData.get("image");
 
-    const PRICE_ID = "price_1TjgfHCRS2C5nrZAmvjqawSr";
+    const amount = Math.round(parseFloat(price || "0") * 100);
 
-    // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       customer_email: user.email,
+      payment_method_types: ["card"],
       line_items: [
         {
-          // Provide the exact Price ID (for example, price_1234) of the product you want to sell
-          price: PRICE_ID,
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: className || "Class Booking",
+              images: image ? [image] : [],
+            },
+            unit_amount: amount,
+          },
           quantity: 1,
         },
       ],
+      mode: "payment",
       metadata: {
-        priceId: PRICE_ID,
         userId: user.id,
         userEmail: user.email,
         userName: user.name,
@@ -38,9 +45,10 @@ export async function POST(request) {
         trainer,
         price,
         duration,
+        image,
       },
-      mode: "subscription",
       success_url: `${origin}/success/${classId}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/all-classes`,
     });
     return NextResponse.redirect(session.url, 303);
   } catch (err) {

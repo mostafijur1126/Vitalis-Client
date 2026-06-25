@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { FaSearch, FaBell, FaUserCircle, FaBars } from "react-icons/fa";
 
@@ -49,9 +50,11 @@ export default function DashboardNavbar({ user, onMenuToggle }) {
           {/* User Profile */}
           <div className="flex items-center gap-3">
             {user?.image ? (
-              <img
+              <Image
                 src={user.image}
                 alt={user.name}
+                width={80}
+                height={80}
                 className="w-9 h-9 rounded-full object-cover border-2 border-[#D4845A]"
               />
             ) : (

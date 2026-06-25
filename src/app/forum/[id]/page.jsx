@@ -141,7 +141,7 @@ export default function ForumPostDetailsPage() {
             userId: user.id,
             userName: user.name,
             userImage: user.image || null,
-            userRole: user.role || "member",
+            role: user.role || "member",
             content: newComment,
           }),
         },
@@ -258,7 +258,7 @@ export default function ForumPostDetailsPage() {
             userId: user.id,
             userName: user.name,
             userImage: user.image || null,
-            userRole: user.role || "member",
+            role: user.role || "member",
             content: replyText,
           }),
         },
@@ -364,10 +364,10 @@ export default function ForumPostDetailsPage() {
                       {post.userName || "Anonymous"}
                     </p>
                     <div className="flex items-center gap-2 text-sm text-[#6B655A] dark:text-[#B8B0A6]">
-                      {post.userRole && (
+                      {post.role && (
                         <span className="font-['Inter'] font-medium text-[#D4845A] bg-[#D4845A]/10 dark:bg-[#D4845A]/20 px-2 py-0.5 rounded-full text-xs">
-                          {post.userRole.charAt(0).toUpperCase() +
-                            post.userRole.slice(1)}
+                          {post.role.charAt(0).toUpperCase() +
+                            post.role.slice(1)}
                         </span>
                       )}
                       <span>•</span>
@@ -721,9 +721,8 @@ export default function ForumPostDetailsPage() {
                   {post.userName || "Anonymous"}
                 </p>
                 <p className="font-['Inter'] text-sm text-[#D4845A]">
-                  {post.userRole
-                    ? post.userRole.charAt(0).toUpperCase() +
-                      post.userRole.slice(1)
+                  {post.role
+                    ? post.role.charAt(0).toUpperCase() + post.role.slice(1)
                     : "Member"}
                 </p>
                 <p className="font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6] mt-2">

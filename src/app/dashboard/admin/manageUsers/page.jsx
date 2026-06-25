@@ -78,6 +78,7 @@ export default function ManageUsersPage() {
   };
 
   const handleRoleChange = async (userId, newRole) => {
+    console.log(userId, newRole);
     setActionLoading(userId);
     try {
       await updateUserRole(userId, newRole);

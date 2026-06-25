@@ -74,32 +74,32 @@ const navItemsByRole = {
     {
       name: "Applied Trainers",
       icon: LuFileUser,
-      href: "/dashboard/admin/trainers",
+      href: "/dashboard/admin/appliedTrainer",
     },
     {
       name: "Manage Trainers",
       icon: MdOutlineManageAccounts,
-      href: "/dashboard/admin/memberships",
+      href: "/dashboard/admin/manageTrainiers",
     },
     {
       name: "Manage Classes",
       icon: SiGoogleclassroom,
-      href: "/dashboard/admin/facilities",
+      href: "/dashboard/admin/manageClasses",
     },
     {
       name: "Add Forum Post",
       icon: MdPostAdd,
-      href: "/dashboard/admin/settings",
+      href: "/dashboard/admin/addForumPost",
     },
     {
       name: "Transactions",
       icon: TbTransactionDollar,
-      href: "/dashboard/admin/settings",
+      href: "/dashboard/admin/transactions",
     },
     {
       name: "Forum Post Manage",
       icon: MdOutlineManageSearch,
-      href: "/dashboard/admin/settings",
+      href: "/dashboard/admin/forumPostManage",
     },
   ],
 };

@@ -4,12 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaImage, FaTimes, FaArrowLeft, FaPencilAlt } from "react-icons/fa";
-import { imageUpload } from "@/lib/imgUpload";
 import Image from "next/image";
-import { authClient } from "@/lib/auth-client";
-import { addForumPosts } from "@/lib/actions/forumPosts";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { addForumPosts } from "@/lib/actions/forumPosts";
+import { imageUpload } from "@/lib/imgUpload";
+import { authClient } from "@/lib/auth-client";
 
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
@@ -55,13 +55,13 @@ export default function CreatePostPage() {
       }
       const result = await addForumPosts(formData, token.token);
       if (result.insertedId) {
-        toast.success("Class added successfully!");
+        toast.success("Post created successfully!");
         resetForm();
-        router.push("/dashboard/trainer/my-posts");
+        // router.push("/dashboard/admin/my-posts");
       }
     } catch (error) {
       console.error(error);
-      toast.error("Faild to add class");
+      toast.error("Failed to create post. Please try again.");
     }
   };
 

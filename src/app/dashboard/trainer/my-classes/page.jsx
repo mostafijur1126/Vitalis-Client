@@ -27,7 +27,6 @@ export default function MyClassesPage() {
   const trainerId = user?.id;
 
   const [classes, setClasses] = useState([]);
-  console.log(classes);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

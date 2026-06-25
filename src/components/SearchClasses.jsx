@@ -1,4 +1,5 @@
 "use client";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -20,26 +21,28 @@ const SearchClasses = () => {
         params.set("search", search);
       }
 
-      if (category && category !== "All Categories") {
+      if (category !== "All Categories") {
         params.set("category", category);
       }
 
-      router.replace(`/all-classes?${params.toString()}`);
-    }, 500);
+      const query = params.toString();
+
+      router.replace(`/all-classes${query ? `?${query}` : ""}`);
+    }, 500); // debounce
 
     return () => clearTimeout(timeout);
   }, [search, category, router]);
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 mb-8">
+    <div className="flex gap-4">
       <input
-        name="search"
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search classes..."
         className="flex-1 px-4 py-2 bg-white dark:bg-[#2D2A24] border border-[#E8E0D8] dark:border-[#3A3530] rounded-lg font-['Inter'] text-sm text-[#2D2A24] dark:text-[#EAE5DE] placeholder-[#8A847C] dark:placeholder-[#6B655A] focus:outline-none focus:border-[#D4845A] transition-colors"
       />
+
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}

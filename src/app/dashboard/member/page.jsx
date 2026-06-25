@@ -17,8 +17,8 @@ import { getMyBookings } from "@/lib/api/myBookingClass";
 import { getFavoriteClass } from "@/lib/api/favoriteClass";
 
 export default function DashboardOverview() {
-  const [bookings, setBookings = {}] = useState([]);
-  const [favorites, setFavorites = {}] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [error, setError] = useState(null);
 
   const { data } = authClient.useSession();
@@ -163,7 +163,7 @@ export default function DashboardOverview() {
                 {user?.email}
               </p>
               <span className="inline-block mt-1 px-3 py-0.5 bg-[#D4845A]/10 dark:bg-[#D4845A]/20 text-[#D4845A] text-xs font-medium rounded-full">
-                {user?.role || "User"}
+                {user?.role || "Member"}
               </span>
             </div>
           </div>
@@ -195,18 +195,18 @@ export default function DashboardOverview() {
                 {status || "Not apply Yet"}
               </span>
             </div>
-            {status === "Rejected" && feedback && (
+            {status?.toLowerCase() === "rejected" && feedback && (
               <p className="mt-3 font-['Inter'] text-sm text-[#C47A6A]">
                 {feedback}
               </p>
             )}
-            {status === "Pending" && (
+            {status?.toLowerCase() === "pending" && (
               <p className="mt-3 font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6]">
                 Your application is under review. Expect a response within 48
                 hours.
               </p>
             )}
-            {status === "Approved" && (
+            {status?.toLowerCase() === "approved" && (
               <p className="mt-3 font-['Inter'] text-sm text-[#A68B6E]">
                 Congratulations! You are now a trainer.
               </p>
