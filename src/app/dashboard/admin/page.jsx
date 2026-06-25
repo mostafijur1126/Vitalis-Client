@@ -56,9 +56,9 @@ export default function AdminDashboardPage() {
   const adminCount = users.filter((u) => u.role === "admin").length;
   const trainerCount = users.filter((u) => u.role === "trainer").length;
   const memberCount = users.filter((u) => u.role === "member").length;
-  const totalUsers = users.length;
-  const totalClasses = classes.length;
-
+  const totalUsers = users?.length;
+  const clsCout = classes.data;
+  const totalClasses = clsCout?.length;
   const roleData = [
     { name: "Admin", value: adminCount },
     { name: "Trainer", value: trainerCount },
