@@ -9,6 +9,7 @@ export const serverFetch = async (path, token = null) => {
 
   // handle 401,403
   const data = await res.json();
+
   return data;
 };
 
