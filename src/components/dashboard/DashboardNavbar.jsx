@@ -30,7 +30,7 @@ export default function DashboardNavbar({ user, onMenuToggle }) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search members, transactions, or trainers..."
+              placeholder="Search users, transactions, or trainers..."
               className="w-full pl-9 pr-4 py-2 bg-[#F5EDE6] dark:bg-[#3A3530] border border-[#E8E0D8] dark:border-[#4A4540] rounded-lg text-[#2D2A24] dark:text-[#EAE5DE] placeholder-[#8A847C] dark:placeholder-[#6B655A] focus:outline-none focus:border-[#D4845A] focus:ring-2 focus:ring-[#D4845A]/20 transition-all font-['Inter'] text-sm"
             />
           </div>
@@ -65,7 +65,7 @@ export default function DashboardNavbar({ user, onMenuToggle }) {
                 {user?.name || "User"}
               </p>
               <p className="font-['Inter'] text-xs text-[#6B655A] dark:text-[#B8B0A6]">
-                {user?.role || "Member"}
+                {user?.role || "User"}
               </p>
             </div>
           </div>

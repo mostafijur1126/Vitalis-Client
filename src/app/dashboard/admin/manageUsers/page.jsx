@@ -235,7 +235,7 @@ export default function ManageUsersPage() {
                             disabled={actionLoading === user._id}
                             className="px-2 py-1.5 bg-[#F5EDE6] dark:bg-[#3A3530] border border-[#E8E0D8] dark:border-[#4A4540] rounded-lg text-xs text-[#2D2A24] dark:text-[#EAE5DE] focus:outline-none focus:border-[#D4845A] disabled:opacity-50"
                           >
-                            <option value="member">Member</option>
+                            <option value="user">User</option>
                             <option value="trainer">Trainer</option>
                             <option value="admin">Admin</option>
                           </select>

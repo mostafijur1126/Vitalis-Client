@@ -146,7 +146,7 @@ export default function ForumPostsManagePage() {
                   <th className="py-3 px-4 font-semibold">Author</th>
                   <th className="py-3 px-4 font-semibold">Category</th>
                   <th className="py-3 px-4 font-semibold">Date</th>
-                  <th className="py-3 px-4 font-semibold">Status</th>
+                  {/* <th className="py-3 px-4 font-semibold">Status</th> */}
                   <th className="py-3 px-4 font-semibold text-right">Action</th>
                 </tr>
               </thead>
@@ -215,7 +215,7 @@ export default function ForumPostsManagePage() {
                     <td className="py-4 px-4 text-[#2D2A24] dark:text-[#EAE5DE] text-xs">
                       {formatDate(post.createdAt)}
                     </td>
-                    <td className="py-4 px-4">{getStatusBadge(post.status)}</td>
+                    {/* <td className="py-4 px-4">{getStatusBadge(post.status)}</td> */}
                     <td className="py-4 px-4 text-right">
                       <button
                         onClick={() => handleDelete(post._id)}

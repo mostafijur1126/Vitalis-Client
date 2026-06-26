@@ -31,14 +31,14 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { TbTransactionDollar } from "react-icons/tb";
 
 const navItemsByRole = {
-  member: [
-    { name: "Overview", icon: FaHome, href: "/dashboard/member" },
-    { name: "Bookings", icon: FaBook, href: "/dashboard/member/bookings" },
-    { name: "Favorites", icon: FaHeart, href: "/dashboard/member/favorites" },
+  user: [
+    { name: "Overview", icon: FaHome, href: "/dashboard/user" },
+    { name: "Bookings", icon: FaBook, href: "/dashboard/user/bookings" },
+    { name: "Favorites", icon: FaHeart, href: "/dashboard/user/favorites" },
     {
       name: "Apply as Trainer",
       icon: FaUserGraduate,
-      href: "/dashboard/member/apply-trainer",
+      href: "/dashboard/user/apply-trainer",
     },
   ],
   trainer: [
@@ -109,8 +109,8 @@ export default function DashboardSidebar({ isOpen, onClose }) {
   const router = useRouter();
   const { data } = authClient.useSession();
   const user = data?.user;
-  const role = (user?.role || "member").toLowerCase();
-  const navItems = navItemsByRole[role] || navItemsByRole.member;
+  const role = (user?.role || "user").toLowerCase();
+  const navItems = navItemsByRole[role] || navItemsByRole.user;
 
   useEffect(() => {
     onClose();

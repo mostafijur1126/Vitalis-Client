@@ -7,18 +7,15 @@ import {
   FaUserCircle,
   FaChalkboardTeacher,
   FaUser,
-  FaTrash,
-  FaCheckCircle,
 } from "react-icons/fa";
 import { getAllTrainer } from "@/lib/api/getTrainerApplication";
 import { authClient } from "@/lib/auth-client";
 import { setUserRole } from "@/lib/api/user";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { DemoteUserAlert } from "@/components/dashboard/admin/DomoteUserAlert";
 
 const demoteTrainer = async (trainerId, token) => {
-  return setUserRole(trainerId, "member", token);
+  return setUserRole(trainerId, "user", token);
 };
 
 export default function ManageTrainersPage() {
@@ -59,7 +56,7 @@ export default function ManageTrainersPage() {
     try {
       await demoteTrainer(trainer._id, token.token);
       setTrainers((prev) => prev.filter((t) => t._id !== trainer._id));
-      toast.success(`${trainer.name} was demoted to member.`);
+      toast.success(`${trainer.name} was demoted to User.`);
     } catch (err) {
       toast.error("Failed to demote trainer: " + err.message);
     } finally {
@@ -190,7 +187,7 @@ export default function ManageTrainersPage() {
                               <AlertDialog.Header>
                                 <AlertDialog.Icon status="danger" />
                                 <AlertDialog.Heading>
-                                  Demote to Member?
+                                  Demote to User?
                                 </AlertDialog.Heading>
                               </AlertDialog.Header>
                               <AlertDialog.Body>

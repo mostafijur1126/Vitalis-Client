@@ -1,4 +1,4 @@
-import FavoriteCard from "@/components/dashboard/member/FavoriteCard";
+import FavoriteCard from "@/components/dashboard/user/FavoriteCard";
 import { getFavoriteClass } from "@/lib/api/favoriteClass";
 import { auth } from "@/lib/auth";
 import { getUserSession } from "@/lib/core/session";

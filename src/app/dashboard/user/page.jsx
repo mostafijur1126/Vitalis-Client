@@ -21,6 +21,9 @@ export default function DashboardOverview() {
   const [favorites, setFavorites] = useState([]);
   const [error, setError] = useState(null);
 
+  const safeBookings = Array.isArray(bookings) ? bookings : [];
+  const safeFavorites = Array.isArray(favorites) ? favorites : [];
+
   const { data } = authClient.useSession();
   const user = data?.user;
   const [application, setApplication] = useState({});
@@ -57,8 +60,8 @@ export default function DashboardOverview() {
           getFavoriteClass(user.id, token.token),
         ]);
 
-        setBookings(bookingResult);
-        setFavorites(favoriteResult);
+        setBookings(Array.isArray(bookingResult) ? bookingResult : []);
+        setFavorites(Array.isArray(favoriteResult) ? favoriteResult : []);
       } catch (err) {
         setError(err.message || "Failed to load data");
       }
@@ -120,7 +123,7 @@ export default function DashboardOverview() {
               Total Booked Classes
             </p>
             <p className="font-['Inter'] text-2xl font-bold text-[#2D2A24] dark:text-[#EAE5DE]">
-              {bookings.length}
+              {safeBookings.length}
             </p>
           </div>
         </div>
@@ -133,7 +136,7 @@ export default function DashboardOverview() {
               Total Favorites
             </p>
             <p className="font-['Inter'] text-2xl font-bold text-[#2D2A24] dark:text-[#EAE5DE]">
-              {favorites.length}
+              {safeFavorites.length}
             </p>
           </div>
         </div>
@@ -163,7 +166,7 @@ export default function DashboardOverview() {
                 {user?.email}
               </p>
               <span className="inline-block mt-1 px-3 py-0.5 bg-[#D4845A]/10 dark:bg-[#D4845A]/20 text-[#D4845A] text-xs font-medium rounded-full">
-                {user?.role || "Member"}
+                {user?.role || "User"}
               </span>
             </div>
           </div>
@@ -172,9 +175,9 @@ export default function DashboardOverview() {
               <FaClock className="w-4 h-4 text-[#D4845A]" />
               <span>
                 <strong className="text-[#2D2A24] dark:text-[#EAE5DE]">
-                  Member Since
+                  User Since
                 </strong>{" "}
-                {user?.memberSince || "N/A"}
+                {user?.userSince || "N/A"}
               </span>
             </div>
           </div>
@@ -239,7 +242,7 @@ export default function DashboardOverview() {
               </tr>
             </thead>
             <tbody>
-              {bookings.length === 0 ? (
+              {safeBookings.length === 0 ? (
                 <tr>
                   <td
                     colSpan="4"
@@ -249,8 +252,8 @@ export default function DashboardOverview() {
                   </td>
                 </tr>
               ) : (
-                bookings
-                  ?.slice(-2)
+                safeBookings
+                  .slice(-2)
                   .reverse()
                   .map((cls) => (
                     <tr

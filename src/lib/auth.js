@@ -11,7 +11,7 @@ if (adminPlugin.schema?.user?.fields?.role) {
   adminPlugin.schema.user.fields.role = {
     ...adminPlugin.schema.user.fields.role,
     input: true,
-    defaultValue: "member",
+    defaultValue: "user",
   };
 }
 
@@ -45,7 +45,7 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        defaultValue: "member",
+        defaultValue: "user",
         input: true,
       },
       plan: {

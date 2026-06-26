@@ -55,14 +55,14 @@ export default function AdminDashboardPage() {
 
   const adminCount = users.filter((u) => u.role === "admin").length;
   const trainerCount = users.filter((u) => u.role === "trainer").length;
-  const memberCount = users.filter((u) => u.role === "member").length;
+  const UserCount = users.filter((u) => u.role === "user").length;
   const totalUsers = users?.length;
   const clsCout = classes.data;
   const totalClasses = clsCout?.length;
   const roleData = [
     { name: "Admin", value: adminCount },
     { name: "Trainer", value: trainerCount },
-    { name: "Member", value: memberCount },
+    { name: "User", value: UserCount },
   ];
 
   const categoryData = [
@@ -154,7 +154,7 @@ export default function AdminDashboardPage() {
             {[
               { label: "Admins", value: adminCount, color: "bg-[#D4845A]" },
               { label: "Trainers", value: trainerCount, color: "bg-[#A68B6E]" },
-              { label: "Members", value: memberCount, color: "bg-[#C9A87C]" },
+              { label: "Users", value: UserCount, color: "bg-[#C9A87C]" },
             ].map((item) => (
               <div
                 key={item.label}

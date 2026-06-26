@@ -15,7 +15,7 @@ export const deleteFavorite = async (userId, classId) => {
 
   const data = await res.json();
 
-  revalidatePath("/dashboard/member/favorites");
+  revalidatePath("/dashboard/user/favorites");
 
   return data;
 };

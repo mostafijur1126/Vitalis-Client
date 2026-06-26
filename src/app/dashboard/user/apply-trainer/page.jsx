@@ -216,7 +216,7 @@ export default function ApplyTrainerPage() {
 
           <div className="mt-8">
             <Link
-              href="/dashboard/member"
+              href="/dashboard/user"
               className="inline-flex items-center gap-2 px-8 py-3 bg-[#D4845A] text-white font-['Inter'] font-semibold rounded-lg hover:bg-[#B86A42] transition-colors shadow-md"
             >
               Go to Overview

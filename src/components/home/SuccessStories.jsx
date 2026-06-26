@@ -7,7 +7,7 @@ const testimonials = [
   {
     id: 1,
     name: "Samantha Read",
-    duration: "Member for 2 years",
+    duration: "User for 2 years",
     quote:
       "\"Vitalis changed the way I view fitness. It's not just about sweating; it's about the connection between body and mind. The instructors are world-class.\"",
     rating: 5,
@@ -15,7 +15,7 @@ const testimonials = [
   {
     id: 2,
     name: "Michael Thompson",
-    duration: "Member for 8 months",
+    duration: "User for 8 months",
     quote:
       '"The variety of classes keeps me motivated. From HIIT to Yoga, there\'s always something new to learn and push myself further. Truly a boutique experience."',
     rating: 5,
@@ -23,7 +23,7 @@ const testimonials = [
   {
     id: 3,
     name: "Samantha Read",
-    duration: "Member for 2 years",
+    duration: "User for 2 years",
     quote:
       '"The variety of classes keeps me motivated. From HIIT to Yoga, there\'s always something new to learn and push myself further. Truly a boutique experience."',
     rating: 5,

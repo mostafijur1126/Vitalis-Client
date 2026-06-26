@@ -19,7 +19,7 @@ const RegisterClient = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState("");
-  const [role, setRole] = useState("member"); // Default role
+  const [role, setRole] = useState("user"); // Default role
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();

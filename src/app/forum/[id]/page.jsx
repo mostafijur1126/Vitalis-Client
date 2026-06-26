@@ -141,7 +141,7 @@ export default function ForumPostDetailsPage() {
             userId: user.id,
             userName: user.name,
             userImage: user.image || null,
-            role: user.role || "member",
+            role: user.role || "user",
             content: newComment,
           }),
         },
@@ -258,7 +258,7 @@ export default function ForumPostDetailsPage() {
             userId: user.id,
             userName: user.name,
             userImage: user.image || null,
-            role: user.role || "member",
+            role: user.role || "user",
             content: replyText,
           }),
         },
@@ -723,7 +723,7 @@ export default function ForumPostDetailsPage() {
                 <p className="font-['Inter'] text-sm text-[#D4845A]">
                   {post.role
                     ? post.role.charAt(0).toUpperCase() + post.role.slice(1)
-                    : "Member"}
+                    : "User"}
                 </p>
                 <p className="font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6] mt-2">
                   With over 15 years in elite athletic nutrition, this author
