@@ -48,6 +48,9 @@ export const getMyclasses = async (trainerId, token) => {
 export const getMyBookedclasses = async (trainerId, token) => {
   return serverFetch(`/api/trainer/classes/bookings/${trainerId}`, token);
 };
+export const getClassStudents = async (classId, token) => {
+  return serverFetch(`/api/trainer/classes/${classId}/students`, token);
+};
 export const getTrainerTotalBookings = async (trainerId) => {
   return serverFetch(`/trainer/total-bookings/${trainerId}`);
 };

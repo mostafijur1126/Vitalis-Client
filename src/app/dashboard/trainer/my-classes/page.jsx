@@ -13,10 +13,15 @@ import {
   FaSpinner,
   FaCalendarAlt,
   FaClock,
+  FaTimes,
 } from "react-icons/fa";
 import { TfiMoney } from "react-icons/tfi";
 import { authClient } from "@/lib/auth-client";
-import { getMyBookedclasses, getMyclasses } from "@/lib/api/allClass";
+import {
+  getClassStudents,
+  getMyBookedclasses,
+  getMyclasses,
+} from "@/lib/api/allClass";
 import EditModal from "@/components/dashboard/trainer/EditModal";
 import { DeleteClassModal } from "@/components/dashboard/trainer/DeleteClassModal";
 import toast from "react-hot-toast";
@@ -31,6 +36,35 @@ export default function MyClassesPage() {
   const [error, setError] = useState(null);
 
   const [refresh, setRefresh] = useState(0);
+  const [students, setStudents] = useState([]);
+  const [studentsLoading, setStudentsLoading] = useState(false);
+  const [studentsError, setStudentsError] = useState(null);
+  const [selectedClassName, setSelectedClassName] = useState("");
+  const [studentModalOpen, setStudentModalOpen] = useState(false);
+
+  const loadStudents = async (classId, className) => {
+    setStudentsError(null);
+    setStudents([]);
+    setSelectedClassName(className || "");
+    setStudentModalOpen(true);
+    setStudentsLoading(true);
+
+    try {
+      const { data: token } = await authClient.token();
+      if (!token) {
+        toast.error("Authentication failed. Please login again.");
+        setStudentsError("Authentication failed.");
+        return;
+      }
+      const data = await getClassStudents(classId, token.token);
+      setStudents(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setStudentsError(err.message || "Failed to load students.");
+    } finally {
+      setStudentsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!trainerId) return;
 
@@ -144,7 +178,7 @@ export default function MyClassesPage() {
       {classes.length === 0 ? (
         <div className="bg-white dark:bg-[#2D2A24] rounded-xl p-12 text-center shadow-sm border border-[#E8E0D8] dark:border-[#3A3530]">
           <p className="font-['Inter'] text-[#6B655A] dark:text-[#B8B0A6]">
-            You haven't created any classes yet.
+            You haven&apos;t created any classes yet.
           </p>
           <Link
             href="/dashboard/trainer/add-class"
@@ -179,7 +213,7 @@ export default function MyClassesPage() {
                     {/* Image */}
                     <td className="py-3 px-4">
                       {cls.classImage ? (
-                        <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#F5EDE6] dark:bg-[#3A3530]">
+                        <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-[#F5EDE6] dark:bg-[#3A3530]">
                           <Image
                             src={cls.classImage}
                             alt={cls.className}
@@ -267,19 +301,85 @@ export default function MyClassesPage() {
                           onDelete={() => setRefresh((r) => r + 1)}
                           classes={cls}
                         ></DeleteClassModal>
-                        <Link
-                          href={`/dashboard/trainer/my-classes/${cls._id}/students`}
+                        <button
+                          type="button"
+                          onClick={() => loadStudents(cls._id, cls.className)}
                           className="p-1.5 text-[#6B655A] dark:text-[#B8B0A6] hover:text-[#D4845A] transition-colors"
                           title="View Students"
                         >
                           <FaUsers className="w-4 h-4" />
-                        </Link>
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {studentModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-2xl bg-white dark:bg-[#2D2A24] rounded-3xl shadow-2xl overflow-hidden border border-[#E8E0D8] dark:border-[#3A3530]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E0D8] dark:border-[#3A3530]">
+              <div>
+                <h2 className="text-lg font-semibold text-[#2D2A24] dark:text-[#EAE5DE]">
+                  Students booked for {selectedClassName}
+                </h2>
+                <p className="text-sm text-[#6B655A] dark:text-[#B8B0A6]">
+                  {students.length} student{students.length === 1 ? "" : "s"}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setStudentModalOpen(false)}
+                className="text-[#6B655A] dark:text-[#B8B0A6] hover:text-[#D4845A] transition-colors"
+                title="Close"
+              >
+                <FaTimes className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6">
+              {studentsLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <FaSpinner className="w-8 h-8 text-[#D4845A] animate-spin" />
+                </div>
+              ) : studentsError ? (
+                <p className="text-center text-sm text-[#C47A6A]">
+                  {studentsError}
+                </p>
+              ) : students.length === 0 ? (
+                <p className="text-center text-sm text-[#6B655A] dark:text-[#B8B0A6]">
+                  No students have booked this class yet.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {students.map((student, index) => (
+                    <div
+                      key={`${student.userEmail}-${index}`}
+                      className="rounded-2xl border border-[#E8E0D8] dark:border-[#3A3530] p-4 bg-[#FCF7F1] dark:bg-[#2B2823]"
+                    >
+                      <p className="font-semibold text-[#2D2A24] dark:text-[#EAE5DE]">
+                        {student.userName || "Unknown Student"}
+                      </p>
+                      <p className="text-sm text-[#6B655A] dark:text-[#B8B0A6]">
+                        {student.userEmail || "No email available"}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="flex justify-end gap-2 px-6 py-4 border-t border-[#E8E0D8] dark:border-[#3A3530]">
+              <button
+                type="button"
+                onClick={() => setStudentModalOpen(false)}
+                className="px-4 py-2 rounded-lg border border-[#D4845A] text-[#D4845A] hover:bg-[#D4845A] hover:text-white transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
