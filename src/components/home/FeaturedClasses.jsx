@@ -83,7 +83,7 @@ export default async function FeaturedClasses() {
 
                 {/* Details Button */}
                 <Link
-                  href={`/classes/${cls._id}`}
+                  href={`/all-classes/${cls._id}`}
                   className="mt-4 block w-full text-center py-2.5 px-4 bg-[#D4845A] text-white font-['Inter'] font-medium rounded-lg hover:bg-[#B86A42] transition-colors shadow-sm hover:shadow-md"
                 >
                   View Details
