@@ -721,8 +721,9 @@ export default function ForumPostDetailsPage() {
                   {post.userName || "Anonymous"}
                 </p>
                 <p className="font-['Inter'] text-sm text-[#D4845A]">
-                  {post.role
-                    ? post.role.charAt(0).toUpperCase() + post.role.slice(1)
+                  {post.userRole
+                    ? post.userRole.charAt(0).toUpperCase() +
+                      post.userRole.slice(1)
                     : "User"}
                 </p>
                 <p className="font-['Inter'] text-sm text-[#6B655A] dark:text-[#B8B0A6] mt-2">

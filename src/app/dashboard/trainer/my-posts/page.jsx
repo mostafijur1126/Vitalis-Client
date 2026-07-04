@@ -43,7 +43,7 @@ export default async function MyPostsPage() {
             You haven't created any posts yet.
           </p>
           <Link
-            href="/forum/create"
+            href="/dashboard/trainer/forum-posts"
             className="inline-block mt-4 px-5 py-2.5 bg-[#D4845A] text-white rounded-lg font-['Inter'] text-sm hover:bg-[#B86A42] transition-colors"
           >
             Write Your First Post
