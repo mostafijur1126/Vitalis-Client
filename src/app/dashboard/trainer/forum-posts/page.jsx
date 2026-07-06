@@ -33,7 +33,9 @@ export default function CreatePostPage() {
   };
 
   const resetForm = () => {
-    (setTitle(""), setDescription(""), setImage(null));
+    setTitle("");
+    setDescription("");
+    setImage(null);
   };
 
   const handleSubmit = async (e) => {
@@ -158,13 +160,6 @@ export default function CreatePostPage() {
                     PNG, JPG, GIF up to 5MB
                   </p>
                 </div>
-                {/* <input
-                  id="imageInput"
-                  type="file"
-                  accept="image/*"
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                  onChange={handleImageChange}
-                /> */}
                 <input
                   type="file"
                   accept="image/*"
@@ -173,6 +168,10 @@ export default function CreatePostPage() {
                     const file = e.target.files?.[0];
                     // console.log(file);
                     if (!file) return;
+                    if (file.size > 5 * 1024 * 1024) {
+                      toast.error("Image must be under 5MB");
+                      return;
+                    }
                     try {
                       setUploading(true);
                       const compressed = await imageCompression(file, {

@@ -184,7 +184,9 @@ export default function ForumPostsManagePage() {
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
                         {post.userImage ? (
-                          <img
+                          <Image
+                            width={24}
+                            height={24}
                             src={post.userImage}
                             alt={post.userName}
                             className="w-6 h-6 rounded-full object-cover"
