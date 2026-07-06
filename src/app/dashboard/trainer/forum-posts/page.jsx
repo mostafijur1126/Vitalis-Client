@@ -10,6 +10,7 @@ import { authClient } from "@/lib/auth-client";
 import { addForumPosts } from "@/lib/actions/forumPosts";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import imageCompression from "browser-image-compression";
 
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
@@ -174,7 +175,12 @@ export default function CreatePostPage() {
                     if (!file) return;
                     try {
                       setUploading(true);
-                      const image = await imageUpload(file);
+                      const compressed = await imageCompression(file, {
+                        maxSizeMB: 0.3,
+                        maxWidthOrHeight: 1200,
+                        useWebWorker: true,
+                      });
+                      const image = await imageUpload(compressed);
                       // console.log("uploaded image:", image);
                       setImage(image.url);
                     } catch (error) {
