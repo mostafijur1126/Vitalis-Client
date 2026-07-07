@@ -27,6 +27,7 @@ const LoginPage = () => {
     if (data) {
       toast.success("Login Successful!");
       router.replace(redirectUrl);
+      redirectUrl && router.push(redirectUrl);
     } else if (error) {
       toast.warning(error.message);
     }

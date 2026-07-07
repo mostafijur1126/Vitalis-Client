@@ -18,7 +18,6 @@ export default async function FeaturedClasses() {
         <div className="text-center mb-12">
           <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl font-bold text-[#2D2A24] dark:text-[#EAE5DE]">
             Featured Classes
-            {classes.length}
           </h2>
           <p className="font-['Inter'] text-[#6B655A] dark:text-[#B8B0A6] mt-2">
             Handpicked top‑rated sessions to elevate your fitness journey
