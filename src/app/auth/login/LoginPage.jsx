@@ -19,15 +19,17 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const redirectUrl = searchParams.get("redirect") || "/";
+    console.log("redirect url: ", redirectUrl);
     const { data, error } = await authClient.signIn.email({
       email, // required
       password, // required
       rememberMe: true,
+      callbackURL: redirectUrl, // optional
     });
     if (data) {
       toast.success("Login Successful!");
+      router.refresh(); // Refresh the page to update the session state
       router.replace(redirectUrl);
-      redirectUrl && router.push(redirectUrl);
     } else if (error) {
       toast.warning(error.message);
     }
