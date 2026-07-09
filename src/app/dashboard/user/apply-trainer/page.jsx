@@ -98,6 +98,7 @@ export default function ApplyTrainerPage() {
             userId: user?.id,
             userName: user?.name,
             userEmail: user?.email,
+            userImage: user?.image,
             experience: parseInt(formData.experience),
             specialty: formData.specialty,
             bio: formData.bio,
