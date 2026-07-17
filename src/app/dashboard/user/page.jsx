@@ -177,7 +177,13 @@ export default function DashboardOverview() {
                 <strong className="text-[#2D2A24] dark:text-[#EAE5DE]">
                   User Since
                 </strong>{" "}
-                {user?.userSince || "N/A"}
+                {user?.createdAt
+                  ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })
+                  : "N/A"}
               </span>
             </div>
           </div>
